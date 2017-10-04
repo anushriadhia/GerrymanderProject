@@ -19,6 +19,10 @@ Rscript -e "install.packages('rgdal')" \
 Rscript -e "install.packages('ggplot2')" \
 Rscript -e "install.packages('spatstat')" \
 Rscript -e "install.packages('RColorBrewer')"
+Rscript -e "install.packages('spatstat')"
+Rscript -e "install.packages('sp')"
+Rscript -e "install.packages('maptools')"
+Rscript -e "install.packages('RODBC')"
 
 EXPOSE 8080
 
