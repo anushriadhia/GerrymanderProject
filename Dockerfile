@@ -13,9 +13,9 @@ EXPOSE 8080
 
 RUN mkdir -p /opt/r/packages && \
     mkdir -p /opt/r/profile && \
-    chown 1001:0 && \
+    chown -R 1001:0 /opt/r/ && \
     echo "r <- getOption('repos'); r['CRAN'] <- 'http://cran.us.r-project.org'; options(repos=r);" > /opt/r/profile/.Rprofile && \
-    chmod -R a+rw /opts/r/
+    chmod -R a+rw /opt/r/
 
 ENV R_LIBS=/opt/r/packages
 ENV R_PROFILE_USER=/opt/r/profile/.Rprofile
