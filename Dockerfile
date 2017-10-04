@@ -1,4 +1,4 @@
-FROM rocker:rstudio
+FROM rocker/rstudio
 MAINTAINER GerrymanderProject <anushri@live.unc.edu>
 
 LABEL io.k8s.description = "Gerrymander Project" \
