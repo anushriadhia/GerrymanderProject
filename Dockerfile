@@ -6,8 +6,7 @@ LABEL io.k8s.description = "Gerrymander Project" \
       io.openshift.expose-services = "8080:http"
 
 #install R
-RUN pip install rpy2 && \
-    apt-get -y install libcurl14-openssl-dev
+RUN apt-get -y install libcurl14-openssl-dev
 
 #setup R configs
 EXPOSE 8080
