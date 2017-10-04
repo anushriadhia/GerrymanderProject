@@ -6,7 +6,8 @@ LABEL io.k8s.description = "Gerrymander Project" \
       io.openshift.expose-services = "8080:http"
 
 #install R
-RUN apt-get -y install libcurl14-openssl-dev
+RUN  apt-get update && \
+     apt-get -y install libcurl14-openssl-dev
 
 #setup R configs
 EXPOSE 8080
