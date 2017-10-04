@@ -6,7 +6,7 @@ LABEL io.k8s.description = "Gerrymander Project" \
       io.openshift.expose-services = "8080:http"
 
 #install R
-RUN  apt-get update 
+#RUN  apt-get update 
 
 #setup R configs
 EXPOSE 8080
