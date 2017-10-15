@@ -67,6 +67,8 @@ $(document).ready(function() {
   // });
 
       newMetric("lool");
+      newMetric("iu");
+
 
       newMap("Map 1");
       newMap("Map 2");
@@ -91,7 +93,16 @@ function newMetric(nameStr) {
 }
 
 function addMetricsRow(metricIndex) {
+  var $metricsTable = $('#metrics-table');
 
+  var newElem = '<tr id="metricsRow' + metricIndex + '"> <td><i class="fa fa-user w3-text-blue w3-large"></i></td> <td>' + metricsList[metricIndex] +
+  '</td> <td id="metricsRowValue' + metricIndex + '"></td> </tr>';
+
+  $('#metrics-table').append(newElem);
+}
+
+function setMetricValue(metricIndex, metricValue) {
+  $('#metricsRowValue' + metricIndex).html(metricValue);
 }
 
 
@@ -102,8 +113,6 @@ function newMap(nameStr) {
 
 // adds a row for a metric graph
 function addNavRow(mapIndex) {
-  var $navDrawer = $('#navDrawer');
-
   // html for new row
   var newElem = '<a href="#" id="navItem' + mapsList[mapIndex] +
     '" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>   ' + mapsList[mapIndex] + '</a>';
