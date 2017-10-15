@@ -73,6 +73,12 @@ $(document).ready(function() {
       newMap("Map 1");
       newMap("Map 2");
 
+      setWarningsText("None");
+      setSafeMetricsText("None");
+      setUploadMapText("No File Uploaded");
+      setUploadDemographicsText("No File Uploaded");
+
+
 });
 
 // names of metrics
@@ -85,6 +91,21 @@ var mapsList = [
 
 ];
 
+function setWarningsText(text) {
+  $('#warnings-text').text(text);
+}
+
+function setSafeMetricsText(text) {
+  $('#safe-metrics-text').text(text);
+}
+
+function setUploadMapText(text) {
+  $('#upload-map-text').text(text);
+}
+
+function setUploadDemographicsText(text) {
+  $('#upload-demographics-text').text(text);
+}
 
 function newMetric(nameStr) {
   metricsList.push(nameStr);
