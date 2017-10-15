@@ -63,5 +63,36 @@ $(document).ready(function() {
           }
         }
       }
+
   });
+
+      newMetric("lool");
+
 });
+
+// metrics
+var metricsList = [
+  "Reock",
+  "PP",
+  "Compactness",
+  "Voter Waste"
+];
+
+function newMetric(nameStr) {
+  metricsList.push(nameStr);
+  addMetricsRow(metricsList.length - 1);
+  addNavRow(metricsList.length - 1);
+}
+
+function addMetricsRow(metricIndex) {
+
+}
+
+function addNavRow(metricIndex) {
+  var $navDrawer = $('#navDrawer');
+  var newElem = '<a href="#" id="navItem' + metricsList[metricIndex] +
+    '" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  ' + metricsList[metricIndex] + '</a>';
+
+  $('#div-nav-drawer').append(newElem);
+  console.log('added');
+}
