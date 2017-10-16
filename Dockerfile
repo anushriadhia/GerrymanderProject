@@ -9,7 +9,7 @@ io.openshift.expose-services = "8080:http"
 RUN apt-get -y update && \
 apt-get -y install python3 python3-pip r-base && \
 pip3 install rpy2 && \
-apt-get -y install libcurl14-openssl-dev
+apt-get -y install libcurl4-openssl-dev
 
 #setup R configs
 EXPOSE 8080
