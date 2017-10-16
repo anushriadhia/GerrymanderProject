@@ -22,5 +22,5 @@ chmod -R a+rw /opt/r/
 ENV R_LIBS = /opt/r/packages
 ENV R_PROFILE_USER=/opt/r/profile/.Rprofile
 USER 1001
-Rscript -e "install.packages(c('maptools', 'rgdal','ggplot2','spatstat' , 'RColorBrewer','spatstat','sp','maptools','RODBC'))"
+RUN Rscript -e "install.packages(c('maptools', 'rgdal','ggplot2','spatstat' , 'RColorBrewer','spatstat','sp','maptools','RODBC'))"
 CMD ["npm start"]
