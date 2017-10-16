@@ -71,7 +71,7 @@ $(document).ready(function() {
 
       var $mapItem = newMap("Google Map");
       var gmap = initMap();
-      gmap.data.loadGeoJson('https://storage.googleapis.com/mapsdevsite/json/google.json');
+      gmap.data.loadGeoJson('https://raw.githubusercontent.com/fisherzachary/fisherzachary.github.io/master/nc.geojson');
 
       setWarningsText("None");
       setSafeMetricsText("None");
