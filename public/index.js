@@ -69,14 +69,12 @@ $(document).ready(function() {
       newMetric("lool");
       newMetric("iu");
 
-
-      newMap("Map 1");
-      newMap("Map 2");
+      var $mapItem = newMap("Google Map");
+      var gmap = initMap();
+      gmap.data.loadGeoJson('https://storage.googleapis.com/mapsdevsite/json/google.json');
 
       setWarningsText("None");
       setSafeMetricsText("None");
-      setUploadMapText("No File Uploaded");
-      setUploadDemographicsText("No File Uploaded");
 
 
 });
@@ -99,18 +97,12 @@ function setSafeMetricsText(text) {
   $('#safe-metrics-text').text(text);
 }
 
-function setUploadMapText(text) {
-  $('#upload-map-text').text(text);
-}
-
-function setUploadDemographicsText(text) {
-  $('#upload-demographics-text').text(text);
-}
-
 function newMetric(nameStr) {
   metricsList.push(nameStr);
-  addMetricsRow(metricsList.length - 1);
+  var index = metricsList.length - 1;
+  addMetricsRow(index);
 
+  $metricRow = $('#metricsRow' + index);
 }
 
 function addMetricsRow(metricIndex) {
@@ -129,7 +121,12 @@ function setMetricValue(metricIndex, metricValue) {
 
 function newMap(nameStr) {
   mapsList.push(nameStr);
-  addNavRow(mapsList.length - 1);
+  var index = mapsList.length - 1;
+  addNavRow(index);
+
+  $mapItem = $('#navItem' + index);
+
+  return $mapItem;
 }
 
 // adds a row for a metric graph
@@ -140,4 +137,13 @@ function addNavRow(mapIndex) {
 
   $('#div-nav-drawer').append(newElem);
   console.log('Added ' + mapsList[mapIndex] + " with index " + mapIndex);
+}
+
+function initMap() {
+  var map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 35.20, lng: -79.0},
+    zoom: 6
+  });
+
+  return map;
 }
