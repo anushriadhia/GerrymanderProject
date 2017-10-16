@@ -16,9 +16,11 @@ apt-get install -y nodejs
 EXPOSE 8080
 RUN mkdir -p /opt/r/packages && \
 mkdir -p /opt/r/profile && \
+mkdir -p /opt/r/repo && \
 chown 1001:0 /opt/r/profile /opt/r/packages && \
 echo "r <- getOption('repos'); r['CRAN'] <- 'http://cran.us.r-project.org'; options(repos=r);" > /opt/r/profile/.Rprofile && \
 chmod -R a+rw /opt/r/
+COPY /public /opt/r/repo
 ENV R_LIBS=/opt/r/packages
 ENV R_PROFILE_USER=/opt/r/profile/.Rprofile
 RUN Rscript -e "install.packages(c('maptools'))"
