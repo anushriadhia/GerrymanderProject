@@ -23,4 +23,4 @@ ENV R_LIBS = /opt/r/packages
 ENV R_PROFILE_USER=/opt/r/profile/.Rprofile
 USER 1001
 Rscript -e "install.packages(c('maptools', 'rgdal','ggplot2','spatstat' , 'RColorBrewer','spatstat','sp','maptools','RODBC'))"
-ENTRYPOINT ["./public/ex-sync.R"]
+CMD ["npm start"]
