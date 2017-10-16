@@ -6,7 +6,8 @@ io.k8s.display-name="R to Node.js Server" \
 io.openshift.expose-services = "8080:http"
 
 #install R
-RUN apt-get -y install r-base && \
+RUN apt-get -y update && \
+apt-get -y install r-base && \
 pip install rpy2 && \
 apt-get -y install libcurl14-openssl-dev
 
