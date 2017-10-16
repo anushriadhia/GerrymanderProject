@@ -19,8 +19,8 @@ mkdir -p /opt/r/profile && \
 chown 1001:0 /opt/r/profile /opt/r/packages && \
 echo "r <- getOption('repos'); r['CRAN'] <- 'http://cran.us.r-project.org'; options(repos=r);" > /opt/r/profile/.Rprofile && \
 chmod -R a+rw /opt/r/
-USER 1001
-ENV R_LIBS = /opt/r/packages
+ENV R_LIBS=/opt/r/packages
 ENV R_PROFILE_USER=/opt/r/profile/.Rprofile
-RUN Rscript -e "install.packages(c('maptools', 'rgdal','ggplot2','spatstat' , 'RColorBrewer','spatstat','sp','maptools','RODBC'))"
+RUN Rscript -e "install.packages(c('maptools'))"
+USER 1001
 CMD ["npm start"]
