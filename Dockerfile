@@ -25,4 +25,4 @@ ENV R_LIBS=/opt/r/packages
 ENV R_PROFILE_USER=/opt/r/profile/.Rprofile
 RUN Rscript -e "install.packages(c('maptools'))"
 USER 1001
-CMD npm /opt/r/repo/index.ejs
+CMD ["npm", "/opt/r/repo/index.ejs"]
