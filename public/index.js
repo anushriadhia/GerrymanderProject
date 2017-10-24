@@ -70,8 +70,7 @@ $(document).ready(function() {
       newMetric("iu");
 
       var $mapItem = newMap("Google Map");
-      var gmap = initMap();
-      gmap.data.loadGeoJson('https://raw.githubusercontent.com/fisherzachary/fisherzachary.github.io/master/nc.geojson');
+      // var gmap = initMap();
 
       setWarningsText("None");
       setSafeMetricsText("None");
@@ -137,13 +136,4 @@ function addNavRow(mapIndex) {
 
   $('#div-nav-drawer').append(newElem);
   console.log('Added ' + mapsList[mapIndex] + " with index " + mapIndex);
-}
-
-function initMap() {
-  var map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 35.20, lng: -79.0},
-    zoom: 6
-  });
-
-  return map;
 }
