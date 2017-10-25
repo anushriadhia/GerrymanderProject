@@ -440,6 +440,7 @@
 
         initMap();
 
+        // initialises map
         function initMap() {
           var map = L.map('map').setView([35, -80], 6);
 
@@ -455,9 +456,9 @@
           var xmlhttp = new XMLHttpRequest();
           xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-              console.log(this.responseText);
+    
               var myObj = JSON.parse(this.responseText);
-              L.geoJSON(myObj, {style: style}).addTo(map);
+              L.geoJSON(myObj, {style: style}).addTo(map);  // adds geojson districts to map with style given in style()
 
             }
           };
@@ -467,17 +468,20 @@
 
         }
 
+        // determines what colour a district should be, based on a given value d (compactness)
         function getColor(d) {
-          return d > 1000 ? '#800026' :
-          d > 500  ? '#BD0026' :
-          d > 200  ? '#E31A1C' :
-          d > 100  ? '#FC4E2A' :
-          d > 50   ? '#FD8D3C' :
-          d > 20   ? '#FEB24C' :
-          d > 10   ? '#FED976' :
-          '#FFEDA0';
+          return d > 7000 ? '#FFEDA0' :
+          d > 6000  ? '#FED976' :
+          d > 5000  ? '#FEB24C' :
+          d > 4000  ? '#FD8D3C' :
+          d > 3000   ? '#FC4E2A' :
+          d > 2000   ? '#E31A1C' :
+          d > 1000   ? '#BD0026' :
+          '#800026';
+
         }
 
+        // determines how districts on map look
         function style(feature) {
           return {
             fillColor: getColor(feature.properties.Compactness),
