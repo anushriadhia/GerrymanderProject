@@ -32,13 +32,13 @@ $(document).ready(function() {
 
   // determines what colour a district should be, based on a given value d (compactness)
   function getColor(d) {
-    return d > 7000 ? '#FFEDA0' :
-    d > 6000  ? '#FED976' :
-    d > 5000  ? '#FEB24C' :
-    d > 4000  ? '#FD8D3C' :
-    d > 3000   ? '#FC4E2A' :
-    d > 2000   ? '#E31A1C' :
-    d > 1000   ? '#BD0026' :
+    return d > 0.6 ? '#FFEDA0' :
+    d > 0.55  ? '#FED976' :
+    d > 0.5  ? '#FEB24C' :
+    d > 0.45  ? '#FD8D3C' :
+    d > 0.4   ? '#FC4E2A' :
+    d > 0.35   ? '#E31A1C' :
+    d > 0.3   ? '#BD0026' :
     '#800026';
 
   }
@@ -46,7 +46,7 @@ $(document).ready(function() {
   // determines how districts on map look
   function style(feature) {
     return {
-      fillColor: getColor(feature.properties.Compactness),
+      fillColor: getColor(feature.properties.Reock),
       weight: 2,
       opacity: 1,
       color: 'white',
