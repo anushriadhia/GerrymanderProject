@@ -19,7 +19,6 @@ info.update = function(props) {
   console.log(this._div);
 
   this._div.innerHTML = '<h4>Reock Score<h4>' + (props ? '<b>' + props.DISTRICT + '</b><br />' + props.Reock : 'Hover over a state');
-  info.addTo(map);
 }
 
 $(document).ready(function() {
@@ -52,6 +51,8 @@ $(document).ready(function() {
     xmlhttp.open("GET", "ncr.geojson", true);
     xmlhttp.send();
     //
+
+      info.addTo(map);
 
     var $compactItem = newMap("Compactness");
     $compactItem.click(function() {
@@ -130,9 +131,9 @@ $(document).ready(function() {
     });
 
     // problems with IE, Opera, and Edge will mean this function would not work
-    if(!L.Broswer.ie && !L.Browser.opera && !L.Browser.edge) {
+    // if(!L.Broswer.ie && !L.Browser.opera && !L.Browser.edge) {
       layer.bringToFront();
-    }
+    // }
 
     info.update(layer.feature.properties);
   }
