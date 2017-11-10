@@ -5,6 +5,8 @@ LABEL io.k8s.description = "Gerrymander Project" \
 io.k8s.display-name="R to Node.js Server" \
 io.openshift.expose-services = "8080:http"
 
+COPY /* /opt/r/repo/
+
 #install R
 RUN apt-get -y update \
     && apt-get -y install python3 \
@@ -23,7 +25,7 @@ RUN apt-get -y update \
     && chmod -R a+rwx /opt/r/
 
 EXPOSE 8080
-COPY /* /opt/r/repo/
+
 ENV R_LIBS=/opt/r/packages
 ENV R_PROFILE_USER=/opt/r/profile/.Rprofile
 USER 1001
