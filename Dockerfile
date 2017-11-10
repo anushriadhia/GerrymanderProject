@@ -18,6 +18,7 @@ RUN apt-get -y update \
     && pip3 install rpy2 \
     && curl -sL https://deb.nodesource.com/setup_6.x | bash - \
     && apt-get -y install nodejs npm \
+    && ln -s $(which nodejs) /usr/bin/node \
     && mkdir -p /opt/r/packages /opt/r/profile /opt/r/repo /opt/r/npm \
     && echo "r <- getOption('repos'); r['CRAN'] <- 'http://cran.us.r-project.org'; options(repos=r);" > /opt/r/profile/.Rprofile \
     && R_LIBS=/opt/r/packages R_PROFILE_USER=/opt/r/profile/.Rprofile Rscript -e "install.packages(c('maptools'))" \
