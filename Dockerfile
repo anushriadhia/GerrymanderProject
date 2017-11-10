@@ -30,5 +30,5 @@ ENV R_LIBS=/opt/r/packages
 ENV R_PROFILE_USER=/opt/r/profile/.Rprofile
 ENV NPM_CONFIG_PREFIX=/opt/r/npm
 USER 1001
-WORKDIR /opt/r/npm/
+WORKDIR /opt/r/repo/
 CMD ["npm", "run-script", "/opt/r/repo/index.ejs"]
