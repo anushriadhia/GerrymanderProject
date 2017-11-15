@@ -4,7 +4,13 @@ var metricsList = [];
 // names of maps
 var mapsList = [];
 
+var featureList = [];
+
+var selectedMap = '';
+
 var geojson;
+
+var map;
 
 var info = L.control();
 
@@ -15,10 +21,14 @@ info.onAdd = function(map) {
 }
 
 info.update = function(props) {
-  console.log(this);
-  console.log(this._div);
+  var prop = null;
+  for(var obj in props) {
+    if(obj == selectedMap) {
+      prop = obj;
+    }
+  }
 
-  this._div.innerHTML = '<h4>Reock Score<h4>' + (props ? '<b>' + props.DISTRICT + '</b><br />' + props.Reock : 'Hover over a state');
+  this._div.innerHTML = '<h4>' + selectedMap + '<h4>' + (props ? '<b>' + props.DISTRICT + '</b><br />' + props[prop] : 'Hover over a state');
 }
 
 $(document).ready(function() {
@@ -27,13 +37,13 @@ $(document).ready(function() {
 
   // initialises map
   function initMap() {
-    var map = L.map('map').setView([35, -80], 6);
+    map = L.map('map').setView([35, -80], 6);
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=sk.eyJ1IjoiaGV5aXRzbWVkeiIsImEiOiJjajk1bWQ5dmwxbWw5MzJwOXV4bm9hM3JpIn0.sTN2b2Bjxh9mM7HsrCfbsg', {
-        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-        maxZoom: 18,
-        id: 'mapbox.streets',
-        accessToken: 'sk.eyJ1IjoiaGV5aXRzbWVkeiIsImEiOiJjajk1bWQ5dmwxbWw5MzJwOXV4bm9hM3JpIn0.sTN2b2Bjxh9mM7HsrCfbsg'
+      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+      maxZoom: 18,
+      id: 'mapbox.streets',
+      accessToken: 'sk.eyJ1IjoiaGV5aXRzbWVkeiIsImEiOiJjajk1bWQ5dmwxbWw5MzJwOXV4bm9hM3JpIn0.sTN2b2Bjxh9mM7HsrCfbsg'
     }).addTo(map);
 
 
@@ -44,7 +54,16 @@ $(document).ready(function() {
       if (this.readyState == 4 && this.status == 200) {
 
         jsonMap = JSON.parse(this.responseText);
-        L.geoJSON(jsonMap, {style: reockStyle}).addTo(map);  // adds geojson districts to map with style given in style()
+        L.geoJSON(jsonMap, {style: districtStyle}).addTo(map);  // adds geojson districts to map with style given in style()
+
+        var propertiesList = Object.keys(jsonMap.features[0].properties);
+
+        for(i = 1; i < propertiesList.length; i++) {
+          var name = propertiesList[i].toString();
+          var $mapItem = newMap(name);
+
+          $mapItem.click(mapItemOnClick($mapItem, name, jsonMap));
+        }
 
       }
     };
@@ -52,40 +71,21 @@ $(document).ready(function() {
     xmlhttp.send();
     //
 
-      info.addTo(map);
-
-    var $compactItem = newMap("Compactness");
-    $compactItem.click(function() {
-      clearMapItemHighlights();
-      $compactItem.addClass("w3-blue");
-
-      geojson = L.geoJSON(jsonMap, {style: compactnessStyle, onEachFeature: onEachFeature}).addTo(map);
-    });
-
-    var $reockItem = newMap('Reock');
-    $reockItem.click(function() {
-      clearMapItemHighlights();
-      $reockItem.addClass("w3-blue");
-
-      geojson = L.geoJSON(jsonMap, {style: reockStyle, onEachFeature: onEachFeature}).addTo(map);
-    });
+    info.addTo(map);
 
   }
 
-  // determines what colour a district should be, based on a given value d (compactness)
-  function getCompactnessColor(d) {
-    return d > 14000 ? '#FFEDA0' :
-    d > 10000  ? '#FED976' :
-    d > 7000  ? '#FEB24C' :
-    d > 5000  ? '#FD8D3C' :
-    d > 3000   ? '#FC4E2A' :
-    d > 2000   ? '#E31A1C' :
-    d > 1000   ? '#BD0026' :
-    '#800026';
+  function mapItemOnClick($item, name, jsonMap) {
+    return function() {
+      clearMapItemHighlights();
+      $mapItem.addClass('w3-blue');
+      selectedMap = name;
+      geojson = L.geoJSON(jsonMap, {style: districtStyle, onEachFeature: onEachFeature}).addTo(map);
+    }
   }
 
   // determines what colour a district should be, based on a given value d (reock)
-  function getReockColor(d) {
+  function getColor(d) {
     return d > 0.6 ? '#FFEDA0' :
     d > 0.55  ? '#FED976' :
     d > 0.5  ? '#FEB24C' :
@@ -97,21 +97,21 @@ $(document).ready(function() {
   }
 
   // determines how districts on map look
-  function compactnessStyle(feature) {
-    return {
-      fillColor: getReockColor(feature.properties.Compactness),
-      weight: 2,
-      opacity: 1,
-      color: 'white',
-      dashArray: '3',
-      fillOpacity: 0.7
-    };
-  }
+  function districtStyle(feature) {
+    var property = null;
 
-  // determines how districts on map look
-  function reockStyle(feature) {
+    for(var prop in feature.properties) {
+      // console.log(prop + ' vs ' + selectedMap + ' for ' );
+      if(prop == selectedMap) {
+        property = prop;
+      }
+    }
+
+    if(property != null)
+    console.log('Property = ' + property.value);
+
     return {
-      fillColor: getReockColor(feature.properties.Reock),
+      fillColor: getColor(feature.properties[property]),
       weight: 2,
       opacity: 1,
       color: 'white',
@@ -134,7 +134,7 @@ $(document).ready(function() {
 
     // problems with IE, Opera, and Edge will mean this function would not work
     // if(!L.Broswer.ie && !L.Browser.opera && !L.Browser.edge) {
-      layer.bringToFront();
+    layer.bringToFront();
     // }
 
     info.update(layer.feature.properties);
@@ -205,7 +205,7 @@ $(document).ready(function() {
   function addNavRow(mapIndex) {
     // html for new row
     var newElem = '<a href="#" id="navItem' + mapIndex +
-      '" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>   ' + mapsList[mapIndex] + '</a>';
+    '" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>   ' + mapsList[mapIndex] + '</a>';
 
     $('#div-nav-drawer').append(newElem);
     console.log('Added ' + mapsList[mapIndex] + " with index " + mapIndex);
@@ -228,19 +228,19 @@ var overlayBg = document.getElementById("myOverlay");
 
 // Toggle between showing and hiding the sidebar, and add overlay effect
 function w3_open() {
-   if (mySidebar.style.display === 'block') {
-       mySidebar.style.display = 'none';
-       overlayBg.style.display = "none";
-   } else {
-       mySidebar.style.display = 'block';
-       overlayBg.style.display = "block";
-   }
+  if (mySidebar.style.display === 'block') {
+    mySidebar.style.display = 'none';
+    overlayBg.style.display = "none";
+  } else {
+    mySidebar.style.display = 'block';
+    overlayBg.style.display = "block";
+  }
 }
 
 // Close the sidebar with the close button
 function w3_close() {
-   mySidebar.style.display = "none";
-   overlayBg.style.display = "none";
+  mySidebar.style.display = "none";
+  overlayBg.style.display = "none";
 }
 
 
