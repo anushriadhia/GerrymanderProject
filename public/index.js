@@ -120,7 +120,9 @@ $(document).ready(function() {
     };
   }
 
-  function highlighFeature(e) {
+  var defaultFeature;
+
+  function highlightFeature(e) {
     var layer = e.target;
 
     layer.setStyle({
@@ -140,16 +142,20 @@ $(document).ready(function() {
 
   function resetHighlight(e) {
     geojson.resetStyle(e.target);
-    info.update()
+    info.update();
+
+    if(defaultFeature != null)
+      highlightFeature(defaultFeature);
+
   }
 
   function zoomToFeature(e) {
-    map.fitBounds(e.target.getBounds());
+    defaultFeature = e;
   }
 
   function onEachFeature(feature, layer) {
     layer.on({
-      mouseover: highlighFeature,
+      mouseover: highlightFeature,
       mouseout: resetHighlight,
       click: zoomToFeature
     });
