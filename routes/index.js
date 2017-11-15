@@ -31,7 +31,7 @@ router.get('/', function(req, res, next) {
     //var content = fs.readFileSync("public/ncr.geojson")
     var ncrGeoText = JSON.parse(fs.readFileSync("public/ncr.geojson"));
     console.log(ncrGeoText);
-    res.render('index', { title: 'Express', var1: 10, vec1: 20, geoDump: JSON.stringify(ncrGeoText.type).toString() });
+    res.render('index', { title: 'Partisan Gerrymandering Detection', var1: 10, vec1: 20, geoDump: JSON.stringify(ncrGeoText).toString() });
 });
 
 module.exports = router;
