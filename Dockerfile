@@ -6,7 +6,7 @@ io.k8s.display-name="R to Node.js Server" \
 io.openshift.expose-services = "8080:http"
 
 
-COPY /* /opt/r/repo/
+COPY /. /opt/r/repo/
 
 #install R
 RUN apt-get -y update \
