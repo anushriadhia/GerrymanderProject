@@ -8,6 +8,8 @@ var featureList = [];
 
 var selectedMap = '';
 
+var layer;
+
 var geojson;
 
 var map;
@@ -78,9 +80,16 @@ $(document).ready(function() {
   function mapItemOnClick($item, name, jsonMap) {
     return function() {
       clearMapItemHighlights();
-      $mapItem.addClass('w3-blue');
+      $item.addClass('w3-blue');
       selectedMap = name;
-      geojson = L.geoJSON(jsonMap, {style: districtStyle, onEachFeature: onEachFeature}).addTo(map);
+
+      if(layer != null)
+        layer.removeFrom(map);
+        
+      layer = L.geoJSON(jsonMap, {style: districtStyle, onEachFeature: onEachFeature});
+
+
+      geojson = layer.addTo(map);
     }
   }
 
@@ -106,9 +115,6 @@ $(document).ready(function() {
         property = prop;
       }
     }
-
-    if(property != null)
-    console.log('Property = ' + property.value);
 
     return {
       fillColor: getColor(feature.properties[property]),
