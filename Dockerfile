@@ -6,7 +6,7 @@ io.k8s.display-name="R to Node.js Server" \
 io.openshift.expose-services = "8080:http"
 
 
-COPY /* /opt/r/repo/
+COPY /. /opt/r/repo/
 
 #install R
 RUN apt-get -y update \
@@ -33,4 +33,5 @@ ENV R_PROFILE_USER=/opt/r/profile/.Rprofile
 ENV NPM_CONFIG_PREFIX=/opt/r/npm
 USER 1001
 WORKDIR /opt/r/repo/
+CMD ["npm", "install"]
 CMD ["npm", "start"]

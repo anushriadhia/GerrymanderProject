@@ -29,6 +29,10 @@
     <!-- Top container -->
     <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
      <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
+
+     <i class="fa fa-map-marker w3-xxxlarge"></i> Upload Shapefile:
+     <input id="upload-map-input" type="file"/>
+
      <span class="w3-bar-item w3-right">Partisan Gerrymandering Detection</span>
     </div>
 
@@ -50,100 +54,47 @@
     <!-- !PAGE CONTENT! -->
     <div class="w3-main" style="margin-left:300px;margin-top:43px;">
 
-     <!-- Header -->
-     <header class="w3-container" style="padding-top:22px">
-       <!-- <h5><b><i class="fa fa-dashboard"></i> Choropleth</b></h5> -->
-     </header>
-
-     <div class="w3-row-padding w3-margin-bottom">
-       <div class="w3-quarter">
-         <div class="w3-container w3-red w3-padding-16">
-           <div class="w3-left"><i class="fa fa-warning w3-xxxlarge"></i></div>
-           <div class="w3-right">
-             <h3 id="warnings-text"></h3>
-           </div>
-           <div class="w3-clear"></div>
-           <h4>Gerrymandering Warnings</h4>
-         </div>
-       </div>
-       <div class="w3-quarter">
-         <div class="w3-container w3-blue w3-padding-16">
-           <div class="w3-left"><i class="fa fa-thumbs-up w3-xxxlarge"></i></div>
-           <div class="w3-right">
-             <h3 id="safe-metrics-text"></h3>
-           </div>
-           <div class="w3-clear"></div>
-           <h4>Safe Metrics</h4>
-         </div>
-       </div>
-       <div class="w3-quarter">
-         <div class="w3-container w3-teal w3-padding-16">
-           <div class="w3-left"><i class="fa fa-map-marker w3-xxxlarge"></i></div>
-           <div class="w3-right">
-             <input id="upload-map-input" type="file"/>
-           </div>
-           <div class="w3-clear"></div>
-           <h4>Upload Map File</h4>
-         </div>
-       </div>
-       <div class="w3-quarter">
-         <div class="w3-container w3-orange w3-text-white w3-padding-16">
-           <div class="w3-left"><i class="fa fa-user w3-xxxlarge"></i></div>
-           <div class="w3-right">
-             <input id="upload-demographics-input" type="file"/>
-           </div>
-           <div class="w3-clear"></div>
-           <h4>Upload Demographics File</h4>
-         </div>
-       </div>
-     </div>
+  
 
      <div class="w3-panel">
        <div class="w3-row-padding" style="margin:0 -16px">
-         <table id = "districtTable">
-            <thead>
-                <tr>
-                    <th>District</th>
-                    <th>Compactness</th>
-                    <th>Reock</th>
-                    <th>Polsby-Popper</th>
-                    <th>Schwartzberg</th>
-                    <th>X-Symmetry</th>
-                    <th>Length-Width</th>
-                    <th>Convex-Hull</th>
-                </tr>
-            </thead>
-            <tbody id="districtTableBody"></tbody>
-          </table>
-         <div id="div-graphs" class="w3-twothird">
-           <h5>Choropleth Map</h5>
-           <div id="map"></div>
-         </div>
-         <div id="div-metrics" class="w3-third">
-           <h5>District Information</h5>
-           <div id = "pieChart"></div>
-           <div id = "barChart"></div><br>
-           <div id = "compactnessBarChart"></div><br>
-           <div id = "lengthwidthBarChart"></div>
-           <div id = "timeChart"></div>
-           <!-- <table id="metrics-table" class="w3-table w3-striped w3-white"></table> -->
+         <h5>Choropleth Map</h5>
+         <div id="map"></div>
+           <div id="div-graphs" class="w3-twothird">
+             <table id = "districtTable">
+                <thead>
+                    <tr>
+                      <th>District</th>
+                      <th>Reock</th>
+                      <th>Polsby-Popper</th>
+                      <th>Schwartzberg</th>
+                      <th>X-Symmetry</th>
+                      <th>Length-Width</th>
+                      <th>Convex-Hull</th>
+                    </tr>
+                </thead>
+                <tbody id="districtTableBody"></tbody>
+              </table>
+           </div>
+           <div id="div-metrics" class="w3-third">
+             <h5>District Information</h5>
+             <div id = "barChart"></div><br>
+             <div id = "lengthwidthBarChart"></div>
+           </div>
          </div>
        </div>
      </div>
-    </div>
 
     <script>
     $(document).ready(function() {
 
       var ncrGeoJSONDump =  "<%= geoDump %>";
       var obj = JSON.parse(ncrGeoJSONDump.replace(/&#34;/g, '"'));
-      console.log(obj.features[0].properties);
-
 
       var districtTableBodyData = "";
 
       for (var i = 0; i < Object.keys(obj.features).length; i++) {
-        districtTableBodyData += "<tr><th>" + obj.features[i].properties.DISTRICT + "</th><th>" + obj.features[i].properties.Compactness.toFixed(3) + "</th><th>" + obj.features[i].properties.Reock.toFixed(3) + "</th><th>" + obj.features[i].properties.PolsbyPopper.toFixed(3) + "</th><th>" +
+        districtTableBodyData += "<tr><th>" + obj.features[i].properties.DISTRICT + "</th><th>" + obj.features[i].properties.Reock.toFixed(3) + "</th><th>" + obj.features[i].properties.PolsbyPopper.toFixed(3) + "</th><th>" +
          obj.features[i].properties.Schwartzberg.toFixed(3) + "</th><th>" + obj.features[i].properties.XSymmetry.toFixed(3) + "</th></th>" + "</th><th>" + obj.features[i].properties.LengthWidth.toFixed(3) + "</th></th>" + "</th><th>" +
           obj.features[i].properties.ConvexHull.toFixed(3) + "</th></tr>";
       }
@@ -159,12 +110,12 @@
           data: {
               type: 'bar',
               json: [
-                  { 'indicator': 'Reock', 'score': obj.features[0].properties.Reock },
-                  { 'indicator': 'Polsby-Popper', 'score': obj.features[0].properties.PolsbyPopper },
-                  { 'indicator': 'Schwartzberg', 'score': obj.features[0].properties.Schwartzberg },
-                  { 'indicator': 'X-Symmetry', 'score': obj.features[0].properties.XSymmetry },
-                  { 'indicator': 'Length-Width', 'score': obj.features[0].properties.LengthWidth },
-                  { 'indicator': 'Convex-Hull', 'score': obj.features[0].properties.ConvexHull }
+                  { 'indicator': 'Reock', 'score': obj.features[0].properties.Reock.toFixed(3) },
+                  { 'indicator': 'Polsby-Popper', 'score': obj.features[0].properties.PolsbyPopper.toFixed(3) },
+                  { 'indicator': 'Schwartzberg', 'score': obj.features[0].properties.Schwartzberg.toFixed(3) },
+                  { 'indicator': 'X-Symmetry', 'score': obj.features[0].properties.XSymmetry.toFixed(3) },
+                  { 'indicator': 'Length-Width', 'score': obj.features[0].properties.LengthWidth.toFixed(3) },
+                  { 'indicator': 'Convex-Hull', 'score': obj.features[0].properties.ConvexHull.toFixed(3) }
               ],
               keys: {
                   x: 'indicator',
@@ -177,47 +128,6 @@
                   },
                   y: {
                       max: 1,
-                      min: 0,
-                      padding: {top:0, bottom:0}
-                  }
-          },
-          bar: {
-              width: {
-                  ratio: .9
-              }
-          }
-      });
-
-      var compactnessStateAverage = 0;
-
-      for (var i = 0; i < Object.keys(obj.features).length; i++) {
-        compactnessStateAverage += obj.features[i].properties.Compactness;
-      }
-
-      compactnessStateAverage = compactnessStateAverage / Object.keys(obj.features).length;
-
-      var compactnessBarChart = c3.generate({
-          title: {
-              text: 'District 1 Compactness'
-          },
-          bindto: '#compactnessBarChart',
-          data: {
-              type: 'bar',
-              json: [
-                  { 'indicator': 'District 1', 'score': obj.features[0].properties.Compactness },
-                  { 'indicator': 'State Average', 'score': compactnessStateAverage }
-              ],
-              keys: {
-                  x: 'indicator',
-                  value: ['score']
-              }
-          },
-          axis: {
-                  x: {
-                      type: 'category'
-                  },
-                  y: {
-                      max: 20000,
                       min: 0,
                       padding: {top:0, bottom:0}
                   }
@@ -246,8 +156,8 @@
           data: {
               type: 'bar',
               json: [
-                  { 'indicator': 'District 1', 'score': obj.features[0].properties.LengthWidth },
-                  { 'indicator': 'State Average', 'score': lengthwidthStateAverage }
+                  { 'indicator': 'District 1', 'score': obj.features[0].properties.LengthWidth.toFixed(3) },
+                  { 'indicator': 'State Average', 'score': lengthwidthStateAverage.toFixed(3) }
               ],
               keys: {
                   x: 'indicator',
@@ -259,7 +169,7 @@
                       type: 'category'
                   },
                   y: {
-                      max: 100000,
+                      max: 1,
                       min: 0,
                       padding: {top:0, bottom:0}
                   }
