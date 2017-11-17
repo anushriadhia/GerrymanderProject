@@ -23,12 +23,12 @@ html,body,h1,h2,h3,h4,h5 {
     color: #777;
 }
 .bad {
-  color: white !important;;
+  color: white !important;
   background-color: red;
 }
 
 .okay {
-  color: black !important;;
+  color: black !important;
   background-color: yellow;
 }
 
@@ -37,8 +37,14 @@ html,body,h1,h2,h3,h4,h5 {
   background-color: green;
 }
 
-.tableBackground {
-  background-color: coral;
+.purpleBox {
+  border-top: 10px solid purple !important;
+  border-bottom: 10px solid purple !important;
+}
+
+.matchTable {
+  color: white !important;
+  background-color: black !important;
 }
 
 /*.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
@@ -55,12 +61,16 @@ table.dataTable tbody tr.selected {
     background-color: #eeeeee !important;
 }
 
-
-/*.datatable td:nth-child(6) {
-  background-color: red;
-  color: #000000;
+.dataTable tbody tr td{
+    border-bottom: 1px solid transparent;
 }
-.datatable tr:nth-child(7) {
-  background-color: blue;
-  color: #000000;
-}*/
+
+.dataTable tbody tr:hover td {
+    border-top: red 1px solid;
+    border-bottom: red 1px solid;
+}
+
+.c3-chart-arc text {
+    fill: red;
+    color: red;
+}
