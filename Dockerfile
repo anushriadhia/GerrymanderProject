@@ -22,7 +22,7 @@ RUN apt-get -y update \
     && ln -s $(which nodejs) /usr/bin/node \
     && mkdir -p /opt/r/packages /opt/r/profile /opt/r/repo /opt/r/npm \
     && echo "r <- getOption('repos'); r['CRAN'] <- 'http://cran.us.r-project.org'; options(repos=r);" > /opt/r/profile/.Rprofile \
-    && R_LIBS=/opt/r/packages R_PROFILE_USER=/opt/r/profile/.Rprofile Rscript -e "install.packages(c('maptools'))" \
+    && R_LIBS=/opt/r/packages R_PROFILE_USER=/opt/r/profile/.Rprofile Rscript -e "install.packages(c('maptools', 'ggplot2', 'RColorBrewer', 'rgdal', 'spdplyr', 'geojsonio', 'rmapshaper', 'spatstat','sp','geojson', 'dismo','rgeos', 'geosphere', 'geometry'))" \
     && chown 1001:0 /opt/r/profile /opt/r/packages \
     && chmod -R a+rwx /opt/r/
 
