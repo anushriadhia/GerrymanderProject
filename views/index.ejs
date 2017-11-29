@@ -89,7 +89,6 @@
 
     <script>
     $(document).ready(function() {
-
       var ncrGeoJSONDump =  "<%= geoDump %>";
       var obj = JSON.parse(ncrGeoJSONDump.replace(/&#34;/g, '"'));
 
@@ -209,6 +208,8 @@
       oTable.$('tr').hover( function() {
           currentRow = $('tr', this.parentNode).index(this) + 1;
 
+          highlightDistrict(currentRow);
+
           for (var i = 0; i < Object.keys(obj.features).length; i++) {
             if (obj.features[i].properties.DISTRICT == currentRow) {
               generateCharts(i);
@@ -241,6 +242,11 @@
       } );
 
       function generateCharts(row) {
+
+        // highlight map
+
+        //
+
         var barChart = c3.generate({
             title: {
                 text: 'District ' + obj.features[row].properties.DISTRICT + ' Scores'

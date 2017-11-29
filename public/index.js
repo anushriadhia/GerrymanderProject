@@ -6,6 +6,7 @@ var mapsList = [];
 
 var featureList = [];
 
+
 var selectedMap = '';
 
 var layer;
@@ -78,6 +79,7 @@ $(document).ready(function() {
   }
 
   function mapItemOnClick($item, name, jsonMap) {
+    featureList = [];
     return function() {
       clearMapItemHighlights();
       $item.addClass('w3-blue');
@@ -95,13 +97,13 @@ $(document).ready(function() {
 
   // determines what colour a district should be, based on a given value d (reock)
   function getColor(d) {
-    return d > 0.6 ? '#FFEDA0' :
-    d > 0.55  ? '#FED976' :
+    return d > 0.75 ? '#FFEDA0' :
+    d > 0.6  ? '#FED976' :
     d > 0.5  ? '#FEB24C' :
     d > 0.45  ? '#FD8D3C' :
     d > 0.4   ? '#FC4E2A' :
-    d > 0.35   ? '#E31A1C' :
-    d > 0.3   ? '#BD0026' :
+    d > 0.3   ? '#E31A1C' :
+    d > 0.15   ? '#BD0026' :
     '#800026';
   }
 
@@ -122,7 +124,7 @@ $(document).ready(function() {
       opacity: 1,
       color: 'white',
       dashArray: '3',
-      fillOpacity: 0.7
+      fillOpacity: 0.5
     };
   }
 
@@ -131,19 +133,7 @@ $(document).ready(function() {
   function highlightFeature(e) {
     var layer = e.target;
 
-    layer.setStyle({
-      weight: 5,
-      color: '#666',
-      dashArray: '',
-      fillOpacity: 0.7
-    });
-
-    // problems with IE, Opera, and Edge will mean this function would not work
-    // if(!L.Broswer.ie && !L.Browser.opera && !L.Browser.edge) {
-    layer.bringToFront();
-    // }
-
-    info.update(layer.feature.properties);
+    highlightLayer(layer);
   }
 
   function resetHighlight(e) {
@@ -157,14 +147,20 @@ $(document).ready(function() {
 
   function zoomToFeature(e) {
     defaultFeature = e;
+    console.log(e.target);
   }
 
   function onEachFeature(feature, layer) {
+    var listItem = {district: feature.properties.DISTRICT, layer: layer};
+    featureList.push(listItem);
+
     layer.on({
       mouseover: highlightFeature,
       mouseout: resetHighlight,
       click: zoomToFeature
     });
+
+
   }
 
   function setWarningsText(text) {
@@ -224,6 +220,31 @@ $(document).ready(function() {
   }
 
 });
+
+function highlightLayer(layer) {
+  layer.setStyle({
+    weight: 5,
+    color: '#666',
+    dashArray: '',
+    fillOpacity: 0.7
+  });
+
+  // problems with IE, Opera, and Edge will mean this function would not work
+  // if(!L.Broswer.ie && !L.Browser.opera && !L.Browser.edge) {
+  layer.bringToFront();
+  // }
+
+  info.update(layer.feature.properties);
+}
+
+function highlightDistrict(number) {
+  for(var i = 0; i < featureList.length; i++) {
+    if(number == featureList[i].district) {
+      highlightLayer(featureList[i].layer);
+      return;
+    }
+  }
+}
 
 //******************************************************
 // Get the Sidebar
