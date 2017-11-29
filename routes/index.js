@@ -10,28 +10,16 @@ console.log("Output Content : \n"+ content);
 console.log("\n *EXIT* \n");
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-    // var vodka = JSON.parse(
-    //     require("fs").readFileSync("public/vodka.json", "utf8"));
-    // R("public/ex-sync.R")
-    //     .data({df: vodka, nGroups: 3, fxn: "mean"})
-    //     .call(function (err, d) {
-    //         if (err) throw err;
-    //         console.log(d);
-    //         //res.send(d);
-    //         res.render(
-    //             'index', {
-    //               title: JSON.stringify(d[1].group),
-    //               var1: JSON.stringify(d[1].rating),
-    //                 vec1: JSON.stringify(d)
-    //             }
-    //
-    //         );
-    //     });
-    //var content = fs.readFileSync("public/ncr.geojson")
+router.get('/', function(req, res, next){
+    res.render('home', {title: 'Spatial Gerrymandering Detection'});
+});
+
+
+/*Get map page. */
+router.get('/map', function(req, res, next) {
     var ncrGeoText = JSON.parse(fs.readFileSync("public/ncr.geojson"));
     console.log(ncrGeoText);
-    res.render('index', { title: 'Partisan Gerrymandering Detection', var1: 10, vec1: 20, geoDump: JSON.stringify(ncrGeoText).toString() });
+    res.render('index', {var1: 10, vec1: 20, geoDump: JSON.stringify(ncrGeoText).toString() });
 });
 
 module.exports = router;

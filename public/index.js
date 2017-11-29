@@ -35,6 +35,10 @@ info.update = function(props) {
 
 $(document).ready(function() {
 
+  $('.button').click(function(){
+    window.location = '../map'
+  });
+
   initMap();
 
   // initialises map
@@ -258,3 +262,4 @@ function w3_close() {
 
 // setWarningsText("None");
 // setSafeMetricsText("None");
+

@@ -1,33 +1,9 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
-    integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
-    crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
-    integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
-    crossorigin=""></script>
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="stylesheets/style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.18/c3.min.css" rel="stylesheet" type="text/css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js" type="text/javascript"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.18/c3.min.js" type="text/javascript"></script>
-
-    <link rel = "stylesheet" href = "//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
-    <script src = "//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-    <script src = "https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js"></script>
-    <link rel = "stylesheet" href = "//cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css">
-    <link rel = "stylesheet" href = "https://cdn.datatables.net/1.10.16/css/dataTables.material.min.css">
-
-    <script src="index.js" type="text/javascript"></script>
-  </head>
+    <% include partials/head %>
+  
   <body class="w3-light-grey">
+      <div id="map"></div>
 
     <!-- Top container -->
     <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
@@ -36,7 +12,7 @@
      <i class="fa fa-map-marker w3-xxxlarge"></i> Upload Shapefile:
      <input id="upload-map-input" type="file"/>
 
-     <span class="w3-bar-item w3-right">Geographic Gerrymandering Detection</span>
+     <span class="w3-bar-item w3-right">Partisan Gerrymandering Detection</span>
     </div>
 
     <!-- Sidebar/menu -->
@@ -46,7 +22,7 @@
      </div>
      <div id="div-nav-drawer" class="w3-bar-block">
        <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
-       <!-- <a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-users fa-fw"></i>  Choropleth</a> -->
+       <a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-users fa-fw"></i>  Choropleth</a>
 
      </div>
     </nav>
@@ -57,13 +33,14 @@
     <!-- !PAGE CONTENT! -->
     <div class="w3-main" style="margin-left:300px;margin-top:43px;">
 
-
+  
 
      <div class="w3-panel">
        <div class="w3-row-padding" style="margin:0 -16px">
-         <br><div id="map"></div>
+         <h5>Choropleth Map</h5>
+         <div id="map"></div>
            <div id="div-graphs" class="w3-twothird">
-             <table id = "districtTable" class="mdl-data-table">
+             <table id = "districtTable">
                 <thead>
                     <tr>
                       <th>District</th>
@@ -96,236 +73,95 @@
       var districtTableBodyData = "";
 
       for (var i = 0; i < Object.keys(obj.features).length; i++) {
-        districtTableBodyData += "<tr><th class = 'matchTable boxable" + i + "'>" + obj.features[i].properties.DISTRICT + "</th><th class = 'reockAnalysis boxable" + i + "'>" + obj.features[i].properties.Reock.toFixed(3) + "</th><th class = 'polsbyAnalysis boxable" + i + "'>" + obj.features[i].properties.PolsbyPopper.toFixed(3) +
-         "</th><th class = 'schwartzbergAnalysis boxable" + i + "'>" + obj.features[i].properties.Schwartzberg.toFixed(3) + "</th><th class = 'colorAnalysis boxable" + i + "'>" + obj.features[i].properties.XSymmetry.toFixed(3) + "</th><th class = 'colorAnalysis boxable" + i + "'>" + obj.features[i].properties.LengthWidth.toFixed(3) +
-          "</th><th class = 'convexhullAnalysis boxable" + i + "'>" + obj.features[i].properties.ConvexHull.toFixed(3) + "</th></tr>";
+        districtTableBodyData += "<tr><th>" + obj.features[i].properties.DISTRICT + "</th><th>" + obj.features[i].properties.Reock.toFixed(3) + "</th><th>" + obj.features[i].properties.PolsbyPopper.toFixed(3) + "</th><th>" +
+         obj.features[i].properties.Schwartzberg.toFixed(3) + "</th><th>" + obj.features[i].properties.XSymmetry.toFixed(3) + "</th></th>" + "</th><th>" + obj.features[i].properties.LengthWidth.toFixed(3) + "</th></th>" + "</th><th>" +
+          obj.features[i].properties.ConvexHull.toFixed(3) + "</th></tr>";
       }
 
       $('#districtTableBody').html(districtTableBodyData);
-      //var table = $('#districtTable').dataTable();
-      //table.row(':eq(0)', { page: 'current' }).select();
-      var oTable = $('#districtTable').DataTable( {
-        scrollY:        600,
-        scrollCollapse: true,
-        paging:         false,
-        fixedColumns:   true,
-        select:         true,
-        columnDefs: [
-            {
-                className: 'mdl-data-table__cell--non-numeric'
-            }
-        ]
-      } );
+      $('#districtTable').DataTable();
 
-      $(".reockAnalysis").each(function() {
-        // get text into variable
-        var colText = $(this).text();
-        var target = 0.289;
-        // need to create an action
-        if (colText >= target + 0.05) {
-          $(this).addClass('good');
-        }
-        else if (colText >= target - 0.05 && colText < target + 0.05) {
-          $(this).addClass('okay');
-        }
-        else {
-          $(this).addClass('bad');
-        }
-      });
-
-      $(".polsbyAnalysis").each(function() {
-        // get text into variable
-        var colText = $(this).text();
-        var target = 0.095;
-        // need to create an action
-        if (colText >= target + 0.05) {
-          $(this).addClass('good');
-        }
-        else if (colText >= target - 0.05 && colText < target + 0.05) {
-          $(this).addClass('okay');
-        }
-        else {
-          $(this).addClass('bad');
-        }
-      });
-
-      $(".schwartzbergAnalysis").each(function() {
-        // get text into variable
-        var colText = $(this).text();
-        var target = 0.308;
-        // need to create an action
-        if (colText >= target + 0.05) {
-          $(this).addClass('good');
-        }
-        else if (colText >= target - 0.05 && colText < target + 0.05) {
-          $(this).addClass('okay');
-        }
-        else {
-          $(this).addClass('bad');
-        }
-      });
-
-      $(".convexhullAnalysis").each(function() {
-        // get text into variable
-        var colText = $(this).text();
-        var target = 0.494;
-        // need to create an action
-        if (colText >= target + 0.05) {
-          $(this).addClass('good');
-        }
-        else if (colText >= target - 0.05 && colText < target + 0.05) {
-          $(this).addClass('okay');
-        }
-        else {
-          $(this).addClass('bad');
-        }
-      });
-
-      $(".colorAnalysis").each(function() {
-        // get text into variable
-        var colText = $(this).text();
-        // need to create an action
-        if (colText >= .6) {
-          $(this).addClass('bad');
-        }
-        else if (colText >= 0.4 && colText < .6) {
-          $(this).addClass('okay');
-        }
-        else {
-          $(this).addClass('good');
-        }
-      });
-
-      var currentRow = 0;
-
-      $('#districtTable tr').hover(function() {
-          $(this).addClass('purpleBox');
-      }, function() {
-          $(this).removeClass('hover');
-      });
-
-      var currentDistrict = 0;
-
-      oTable.$('tr').hover( function() {
-          currentRow = $('tr', this.parentNode).index(this) + 1;
-
-          for (var i = 0; i < Object.keys(obj.features).length; i++) {
-            if (obj.features[i].properties.DISTRICT == currentRow) {
-              generateCharts(i);
-              $(".boxable" + currentDistrict).each(function() {
-                // get text into variable
-                $(this).removeClass('purpleBox');
-              });
-              currentDistrict = i;
-              $(".boxable" + i).each(function() {
-                // get text into variable
-                $(this).addClass('purpleBox');
-              });
-            }
+      var barChart = c3.generate({
+          title: {
+              text: 'District 1 Scores'
+          },
+          bindto: '#barChart',
+          data: {
+              type: 'bar',
+              json: [
+                  { 'indicator': 'Reock', 'score': obj.features[0].properties.Reock.toFixed(3) },
+                  { 'indicator': 'Polsby-Popper', 'score': obj.features[0].properties.PolsbyPopper.toFixed(3) },
+                  { 'indicator': 'Schwartzberg', 'score': obj.features[0].properties.Schwartzberg.toFixed(3) },
+                  { 'indicator': 'X-Symmetry', 'score': obj.features[0].properties.XSymmetry.toFixed(3) },
+                  { 'indicator': 'Length-Width', 'score': obj.features[0].properties.LengthWidth.toFixed(3) },
+                  { 'indicator': 'Convex-Hull', 'score': obj.features[0].properties.ConvexHull.toFixed(3) }
+              ],
+              keys: {
+                  x: 'indicator',
+                  value: ['score']
+              }
+          },
+          axis: {
+                  x: {
+                      type: 'category'
+                  },
+                  y: {
+                      max: 1,
+                      min: 0,
+                      padding: {top:0, bottom:0}
+                  }
+          },
+          bar: {
+              width: {
+                  ratio: .9
+              }
           }
+      });
 
 
-          //generateCharts(currentRow);
-          $(this).addClass('purpleBox');
-          console.log("Hovering at District " + currentRow + ".");
+      var lengthwidthStateAverage = 0;
 
-          var r = oTable.row( currentRow );
-                     r.to$().addClass( 'purpleBox');
-
-          //console.log($('tr', this.parentNode));
-
-          //$('tr', this.parentNode).index(this).addClass('purpleBox');
-          $('th:nth-child(0)').css('.purpleBox');
-      }, function() {
-          oTable.$('tr.highlighted').removeClass('highlighted');
-      } );
-
-      function generateCharts(row) {
-        var barChart = c3.generate({
-            title: {
-                text: 'District ' + obj.features[row].properties.DISTRICT + ' Scores'
-            },
-            bindto: '#barChart',
-            data: {
-                type: 'bar',
-                json: [
-                    { 'indicator': 'Reock', 'score': obj.features[row].properties.Reock.toFixed(3) },
-                    { 'indicator': 'Polsby-Popper', 'score': obj.features[row].properties.PolsbyPopper.toFixed(3) },
-                    { 'indicator': 'Schwartzberg', 'score': obj.features[row].properties.Schwartzberg.toFixed(3) },
-                    { 'indicator': 'X-Symmetry', 'score': obj.features[row].properties.XSymmetry.toFixed(3) },
-                    { 'indicator': 'Length-Width', 'score': obj.features[row].properties.LengthWidth.toFixed(3) },
-                    { 'indicator': 'Convex-Hull', 'score': obj.features[row].properties.ConvexHull.toFixed(3) }
-                ],
-                keys: {
-                    x: 'indicator',
-                    value: ['score']
-                },
-                labels: true
-            },
-            axis: {
-                    x: {
-                        type: 'category'
-                    },
-                    y: {
-                        max: 1,
-                        min: 0,
-                        padding: {top:0, bottom:0}
-                    }
-            },
-            bar: {
-                width: {
-                    ratio: .9
-                }
-            }
-        });
-
-        var lengthwidthStateAverage = 0;
-
-        for (var i = 0; i < Object.keys(obj.features).length; i++) {
-          lengthwidthStateAverage += obj.features[i].properties.LengthWidth;
-        }
-
-        lengthwidthStateAverage = lengthwidthStateAverage / Object.keys(obj.features).length;
-
-        var lengthwidthBarChart = c3.generate({
-            title: {
-                text: 'District ' + obj.features[row].properties.DISTRICT + ' Length-Width'
-            },
-            bindto: '#lengthwidthBarChart',
-            data: {
-                type: 'bar',
-                json: [
-                    { 'indicator': 'District ' + obj.features[row].properties.DISTRICT, 'score': obj.features[row].properties.LengthWidth.toFixed(3) },
-                    { 'indicator': 'State Average', 'score': lengthwidthStateAverage.toFixed(3) }
-                ],
-                keys: {
-                    x: 'indicator',
-                    value: ['score']
-                },
-                labels: true
-            },
-            axis: {
-                    x: {
-                        type: 'category'
-                    },
-                    y: {
-                        max: 1,
-                        min: 0,
-                        padding: {top:0, bottom:0}
-                    }
-            },
-            bar: {
-                width: {
-                    ratio: .9
-                }
-            }
-        });
+      for (var i = 0; i < Object.keys(obj.features).length; i++) {
+        lengthwidthStateAverage += obj.features[i].properties.LengthWidth;
       }
+
+      lengthwidthStateAverage = lengthwidthStateAverage / Object.keys(obj.features).length;
+
+      var lengthwidthBarChart = c3.generate({
+          title: {
+              text: 'District 1 Length-Width'
+          },
+          bindto: '#lengthwidthBarChart',
+          data: {
+              type: 'bar',
+              json: [
+                  { 'indicator': 'District 1', 'score': obj.features[0].properties.LengthWidth.toFixed(3) },
+                  { 'indicator': 'State Average', 'score': lengthwidthStateAverage.toFixed(3) }
+              ],
+              keys: {
+                  x: 'indicator',
+                  value: ['score']
+              }
+          },
+          axis: {
+                  x: {
+                      type: 'category'
+                  },
+                  y: {
+                      max: 1,
+                      min: 0,
+                      padding: {top:0, bottom:0}
+                  }
+          },
+          bar: {
+              width: {
+                  ratio: .9
+              }
+          }
+      });
 
 
     });
-
     </script>
-    <!-- <div id = "geoDump"></div> -->
   </body>
 </html>

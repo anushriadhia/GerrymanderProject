@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <% include partials/head %>
+
+    <body>
+
+   
+    <div class="container">
+        <div id="lightHeader">
+            spatial
+        </div>
+        <div id= "darkHeader">
+            gerrymandering
+        </div>
+    </div>
+    <section class="main">
+            <a class="arrow-wrap" href="#about">
+            <span class="arrow"></span>
+            <!--<span class="hint">scroll</span>-->
+            </a>
+
+            <div class = "about" id = "about">
+                <h1> What is this about?</h1>
+                <p>
+                    In the process of setting electoral districts, gerrymandering is a practice intended to establish a political advantage for a particular party or group by manipulating district boundaries. The resulting district is known as a gerrymander (/ˈdʒɛriˌmændər/, recently changed from the original /ˈɡɛriˌmændər/); however, that word can also refer to the process. The term gerrymandering has negative connotations. Two principal tactics are used in gerrymandering: "cracking" (i.e. diluting the voting power of the opposing party's supporters across many districts) and "packing" (concentrating the opposing party's voting power in one district to reduce their voting power in other districts).[1]
+                    In addition to its use achieving desired electoral results for a particular party, gerrymandering may be used to help or hinder a particular demographic, such as a political, ethnic, racial, linguistic, religious, or class group, such as in U.S. federal voting district boundaries that produce a majority of constituents representative of African-American or other racial minorities, known as "majority-minority districts". Gerrymandering can also be used to protect incumbents.
+                </p>
+            </div>
+
+            <div class = "button">
+                See an example
+            </div>
+    </section>
+
+</body>
+
+
+
+
+</html>
+<script>
+$(window).scroll( function(){
+
+    //get scroll position
+    var topWindow = $(window).scrollTop();
+    //multipl by 1.5 so the arrow will become transparent half-way up the page
+    var topWindow = topWindow * 1.5;
+
+    //get height of window
+    var windowHeight = $(window).height();
+        
+    //set position as percentage of how far the user has scrolled 
+    var position = topWindow / windowHeight;
+    //invert the percentage
+    position = 1 - position;
+
+    //define arrow opacity as based on how far up the page the user has scrolled
+    //no scrolling = 1, half-way up the page = 0
+
+    $('.arrow-wrap').css('opacity', position);
+
+});
+
+    //Code stolen from css-tricks for smooth scrolling:
+// $(function() {
+//     $('a[href*=#]:not([href=#])').click(function() {
+//         if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+//             var target = $(this.hash);
+//             target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+            
+//             if (target.length) {
+//                 $('html,body').animate({
+//                     scrollTop: target.offset().top
+//                 }, 1000);
+//                 return false;
+//             }
+//         }
+//     });
+// });
+
+
+</script>
