@@ -16,7 +16,7 @@ RUN apt-get -y update \
         gnupg \
         libcurl4-openssl-dev \
         curl \
-        libv8-3.14.5 \
+        libv8-3.14-dev  \
     && pip3 install rpy2 \
     && curl -sL https://deb.nodesource.com/setup_6.x | bash - \
     && apt-get -y install nodejs npm \
