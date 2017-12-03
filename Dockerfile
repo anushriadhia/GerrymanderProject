@@ -15,6 +15,8 @@ RUN apt-get -y update \
         r-base \
         gnupg \
         libcurl4-openssl-dev \
+        libjq-dev \
+        libprotobuf-dev \
         curl \
         libv8-3.14-dev  \
     && pip3 install rpy2 \
