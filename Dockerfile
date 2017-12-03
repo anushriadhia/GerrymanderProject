@@ -17,6 +17,8 @@ RUN apt-get -y update \
         libcurl4-openssl-dev \
         libjq-dev \
         libprotobuf-dev \
+        libgdal-dev \
+        protobuf-compiler \
         curl \
         libv8-3.14-dev  \
     && pip3 install rpy2 \
