@@ -18,6 +18,7 @@ RUN apt-get -y update \
         curl \
     && pip3 install rpy2 \
     && curl -sL https://deb.nodesource.com/setup_6.x | bash - \
+    && apt-get install libv8-dev \
     && apt-get -y install nodejs npm \
     && ln -s $(which nodejs) /usr/bin/node \
     && mkdir -p /opt/r/packages /opt/r/profile /opt/r/repo /opt/r/npm \
