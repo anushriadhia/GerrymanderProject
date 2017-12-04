@@ -16,7 +16,7 @@ router.get('/', function(req, res, next){
 router.get('/map', function(req, res, next) {
     var ncrGeoText = JSON.parse(fs.readFileSync("public/ncr.geojson"));
     console.log(ncrGeoText);
-    res.render('index', {var1: 10, vec1: 20, geoDump: JSON.stringify(ncrGeoText).toString() });
+    res.render('index', {var1: 10, vec1: 20, geoDump: JSON.stringify(ncrGeoText).toString(), title: "Spatial Gerrymandering Detection" });
 });
 
 module.exports = router;
