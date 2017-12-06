@@ -141,7 +141,7 @@ border-color: #111 transparent transparent transparent;
   margin: 0px;
 }
 #map {
-  width: 1500px;
+  width: 100%;
   height: 460px;
 }
 html,body,h1,h2,h3,h4,h5 {
