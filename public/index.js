@@ -6,7 +6,6 @@ var mapsList = [];
 
 var featureList = [];
 
-
 var selectedMap = '';
 
 var layer;
@@ -14,6 +13,8 @@ var layer;
 var geojson;
 
 var map;
+
+var defaultFeature;
 
 var info = L.control();
 
@@ -128,7 +129,7 @@ $(document).ready(function() {
     };
   }
 
-  var defaultFeature;
+
 
   function highlightFeature(e) {
     var layer = e.target;
@@ -137,12 +138,7 @@ $(document).ready(function() {
   }
 
   function resetHighlight(e) {
-    geojson.resetStyle(e.target);
-    info.update();
-
-    if(defaultFeature != null)
-      highlightFeature(defaultFeature);
-
+    resetLayerHighlight(e.target);
   }
 
   function zoomToFeature(e) {
@@ -221,6 +217,28 @@ $(document).ready(function() {
 
 });
 
+/**
+  * Clears all highlights for the given layer
+  */
+function resetLayerHighlight(layer) {
+  geojson.resetStyle(layer);
+  info.update();
+
+  if(defaultFeature != null)
+    highlightFeature(defaultFeature);
+}
+
+function resetAllHighlights() {
+  for(var i = 0; i < featureList.length; i++) {
+    console.log('Resetting ' + featureList[i].district);
+    resetLayerHighlight(featureList[i].layer);
+
+  }
+}
+
+/**
+  * Highlights a layer on the map
+  */
 function highlightLayer(layer) {
   layer.setStyle({
     weight: 5,
@@ -237,6 +255,9 @@ function highlightLayer(layer) {
   info.update(layer.feature.properties);
 }
 
+/**
+  * Highlights a district on the map, depending on the given district number
+  */
 function highlightDistrict(number) {
   for(var i = 0; i < featureList.length; i++) {
     if(number == featureList[i].district) {

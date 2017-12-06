@@ -207,7 +207,7 @@
 
       oTable.$('tr').hover( function() {
           currentRow = $('tr', this.parentNode).index(this) + 1;
-
+          resetAllHighlights();
           highlightDistrict(currentRow);
 
           for (var i = 0; i < Object.keys(obj.features).length; i++) {
