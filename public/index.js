@@ -32,7 +32,7 @@ info.update = function(props) {
     }
   }
 
-  this._div.innerHTML = '<h4>' + selectedMap + '<h4>' + (props ? '<b>' + props.DISTRICT + '</b><br />' + props[prop] : 'Hover over a state');
+  this._div.innerHTML = '<h4>' + selectedMap + '<h4>' + (props ? '<b>' + props.DISTRICT + '</b><br />' + Math.trunc(props[prop] * 1000) / 1000 : 'Hover over a district');
 }
 
 $(document).ready(function() {
@@ -54,6 +54,7 @@ $(document).ready(function() {
     // temporary
     var xmlhttp = new XMLHttpRequest();
     var jsonMap;
+    var hasDefault = false;
     xmlhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
 
@@ -67,9 +68,17 @@ $(document).ready(function() {
           var $mapItem = newMap(name);
 
           $mapItem.click(mapItemOnClick($mapItem, name, jsonMap));
+
+          if(!hasDefault) {
+            hasDefault = true;
+            mapItemOnClick($mapItem, name, jsonMap);
+          }
+
+
         }
 
       }
+
     };
     xmlhttp.open("GET", "ncr.geojson", true);
     xmlhttp.send();
@@ -143,7 +152,6 @@ $(document).ready(function() {
 
   function zoomToFeature(e) {
     defaultFeature = e;
-    console.log(e.target);
   }
 
   function onEachFeature(feature, layer) {
@@ -223,16 +231,11 @@ $(document).ready(function() {
 function resetLayerHighlight(layer) {
   geojson.resetStyle(layer);
   info.update();
-
-  if(defaultFeature != null)
-    highlightFeature(defaultFeature);
 }
 
 function resetAllHighlights() {
   for(var i = 0; i < featureList.length; i++) {
-    console.log('Resetting ' + featureList[i].district);
     resetLayerHighlight(featureList[i].layer);
-
   }
 }
 
@@ -249,7 +252,7 @@ function highlightLayer(layer) {
 
   // problems with IE, Opera, and Edge will mean this function would not work
   // if(!L.Broswer.ie && !L.Browser.opera && !L.Browser.edge) {
-  layer.bringToFront();
+  // layer.bringToFront();
   // }
 
   info.update(layer.feature.properties);
@@ -261,7 +264,9 @@ function highlightLayer(layer) {
 function highlightDistrict(number) {
   for(var i = 0; i < featureList.length; i++) {
     if(number == featureList[i].district) {
+      console.log(featureList[i].layer);
       highlightLayer(featureList[i].layer);
+
       return;
     }
   }
