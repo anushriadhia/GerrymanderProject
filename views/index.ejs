@@ -192,7 +192,7 @@
         }
       });
 
-
+      var currentRow = 0;
       var lengthwidthStateAverage = 0;
 
       for (var i = 0; i < Object.keys(obj.features).length; i++) {
@@ -230,13 +230,11 @@
           $('th:nth-child(0)').css('.purpleBox');
       }, function() {
           oTable.$('tr.highlighted').removeClass('highlighted');
-      } );
+      });
 
       function generateCharts(row) {
 
         // highlight map
-
-        //
 
         var barChart = c3.generate({
             title: {
@@ -318,9 +316,6 @@
             }
         });
       }
-
-
-    });
     </script>
   </body>
 </html>
