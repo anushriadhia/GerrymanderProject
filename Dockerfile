@@ -15,12 +15,7 @@ RUN apt-get -y update \
         r-base \
         gnupg \
         libcurl4-openssl-dev \
-        libjq-dev \
-        libprotobuf-dev \
-        libgdal-dev \
-        protobuf-compiler \
         curl \
-        libv8-3.14-dev  \
     && pip3 install rpy2 \
     && curl -sL https://deb.nodesource.com/setup_6.x | bash - \
     && apt-get -y install nodejs npm \
