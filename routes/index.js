@@ -23,7 +23,13 @@ router.get('/map', function(req, res, next) {
         console.log(district)
     }
 
-    res.render('index', { title: 'Geographic Gerrymandering Detection', var1: 10, vec1: 20, geoDump: JSON.stringify(ncrGeoText).toString() });
+    var metricType = ['r', 'pp', 's', 'xs', 'lw', 'ch'];
+
+    res.render('index', { title: 'Geographic Gerrymandering Detection', 
+                            var1: 10, 
+                            vec1: 20, 
+                            geoDump: JSON.stringify(ncrGeoText).toString()
+                        });
 });
 
 module.exports = router;

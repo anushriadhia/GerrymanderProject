@@ -10,7 +10,16 @@
        .shp <input id="shp" type="file" name=".shp" />
        .dbf <input id="dbf" type="file" name=".dbf" />
        <h5>Map Types</h5>
-     </div>
+      </div>
+
+      <!-- <% for (var metric of metricTypes) { %>
+        <p>
+            <label for = "<%= metric %>label">Reock:</label>
+            <input type = "text" id = "<%= metric %>label" 
+               style = "border:0; color:#b9cd6d; font-weight:bold;">
+         </p>
+         <div id = "slider<%= metric %>"></div>
+      <% } %> -->
 
      <div id="div-nav-drawer" class="w3-bar-block">
        <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
@@ -24,41 +33,41 @@
     <!-- !PAGE CONTENT! -->
     <div class="w3-main" style="margin-left:300px;margin-top:43px;">
 
-      <!-- <p>View project at <a href="http://github.com/wavded/js-shapefile-to-geojson">http://github.com/wavded/js-shapefile-to-geojson</a>. -->
-      <script src="http://rs1.adc4gis.com/js/openlayers/2.9.1/OpenLayers-Proj4.js"></script>
-      <script src="stream.js"></script>
-      <script src="shapefile.js"></script>
-      <script src="dbf.js"></script>
-      <script type="text/javascript">
-          OpenLayers._getScriptLocation = function(){
-              return "http://rs1.adc4gis.com/js/openlayers/2.9.1/";
-          };
-          var map = new OpenLayers.Map("map",{allOverlays: true}),
-              parser = new OpenLayers.Format.GeoJSON(),
-              vector = new OpenLayers.Layer.Vector("Converted")
-          map.addLayer(vector);
-          var onchange = function(e) {
-            console.log("File uploaded. Processing...");
-              var shpFile = document.getElementById('shp').files[0];
-              var dbfFile = document.getElementById('dbf').files[0];
-              if (shpFile) {
-                  var opts = { shp: shpFile };
-                  if (dbfFile) {
-                      opts['dbf'] = dbfFile;
-                  }
-                  shapefile = new Shapefile(opts, function(data){
-                      //var features = parser.read(data.geojson);
-                      //vector.addFeatures(features);
-                      //map.zoomToExtent(vector.getDataExtent());
-                      console.log(data);
-                  });
-              }
-          }
-          document.body.onload = function(){
-              document.getElementById('shp').addEventListener('change', onchange, false);
-              document.getElementById('dbf').addEventListener('change', onchange, false);
-          }
-      </script>
+    <!-- <p>View project at <a href="http://github.com/wavded/js-shapefile-to-geojson">http://github.com/wavded/js-shapefile-to-geojson</a>. -->
+    <script src="http://rs1.adc4gis.com/js/openlayers/2.9.1/OpenLayers-Proj4.js"></script>
+    <script src="stream.js"></script>
+    <script src="shapefile.js"></script>
+    <script src="dbf.js"></script>
+    <script type="text/javascript">
+        OpenLayers._getScriptLocation = function(){
+            return "http://rs1.adc4gis.com/js/openlayers/2.9.1/";
+        };
+        var map = new OpenLayers.Map("map",{allOverlays: true}),
+            parser = new OpenLayers.Format.GeoJSON(),
+            vector = new OpenLayers.Layer.Vector("Converted")
+        map.addLayer(vector);
+        var onchange = function(e) {
+          console.log("File uploaded. Processing...");
+            var shpFile = document.getElementById('shp').files[0];
+            var dbfFile = document.getElementById('dbf').files[0];
+            if (shpFile) {
+                var opts = { shp: shpFile };
+                if (dbfFile) {
+                    opts['dbf'] = dbfFile;
+                }
+                shapefile = new Shapefile(opts, function(data){
+                    //var features = parser.read(data.geojson);
+                    //vector.addFeatures(features);
+                    //map.zoomToExtent(vector.getDataExtent());
+                    console.log(data);
+                });
+            }
+        }
+        document.body.onload = function(){
+            document.getElementById('shp').addEventListener('change', onchange, false);
+            document.getElementById('dbf').addEventListener('change', onchange, false);
+        }
+    </script>
 
      <div class="w3-panel">
        <div class="w3-row-padding" style="margin:0 -16px">
@@ -123,72 +132,31 @@
         ]
       } );
 
-      $(".reockAnalysis").each(function() {
-        // get text into variable
-        var colText = $(this).text();
-        var target = 0.289;
-        // need to create an action
-        if (colText <= target) {
-          $(this).addClass('good');
-        }
-        else {
-          $(this).addClass('bad');
-        }
-      });
 
-      $(".polsbyAnalysis").each(function() {
-        // get text into variable
-        var colText = $(this).text();
-        var target = 0.095;
-        // need to create an action
-        if (colText <= target) {
-          $(this).addClass('good');
-        }
-        else {
-          $(this).addClass('bad');
-        }
-      });
+      //default table color
+      colorTable(".reockAnalysis", .289);
+      colorTable(".polsbyAnalysis", .095);
+      colorTable(".schwartzbergAnalysis", .308);
+      colorTable(".convexhullAnalysis", .494);
+      colorTable(".colorAnalysis", .6);
 
-      $(".schwartzbergAnalysis").each(function() {
-        // get text into variable
-        var colText = $(this).text();
-        var target = 0.308;
-        // need to create an action
-        if (colText <= target) {
-          $(this).addClass('good');
-        }
-        else {
-          $(this).addClass('bad');
-        }
-      });
+      function colorTable(metric, target){
+        $(metric).each(function(){
+          var colText = $(this).text();
 
-      $(".convexhullAnalysis").each(function() {
-        // get text into variable
-        var colText = $(this).text();
-        var target = 0.494;
-        // need to create an action
-        if (colText <= target) {
-          $(this).addClass('good');
-        }
-        else {
-          $(this).addClass('bad');
-        }
-      });
+          if(colText <= target){
+            $(this).addClass('good');
+          } else {
+            $(this).addClass('bad');
+          }
+        });
 
-      $(".colorAnalysis").each(function() {
-        // get text into variable
-        var colText = $(this).text();
-        // need to create an action
-        if (colText <= .6) {
-          $(this).addClass('bad');
-        }
-        else {
-          $(this).addClass('good');
-        }
-      });
+      }
+
+
+
 
       //highlight row and generate charts on hover
-
       $('#districtTableBody tr').hover(function(){
         var district = $(this).attr('id');
         highlightDistrict(district);
@@ -197,9 +165,6 @@
         //highlighting the rows with the good/bad/ok colors
         $(`.boxable${district}.bad`).css('background-color', '#ff6666');
         $(`.boxable${district}.good`).css('background-color', '#99ff99');
-
-        console.log(`hovering at district ${district}`);
-        
 
       }, function(){
         resetAllHighlights();
