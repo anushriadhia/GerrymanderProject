@@ -3,13 +3,6 @@
   <% include partials/head %>
   <body class="w3-light-grey">
 
-    <!-- Top container -->
-    <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
-     <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
-
-     <span class="w3-bar-item w3-right">Geographic Gerrymandering Detection</span>
-    </div>
-
     <!-- Sidebar/menu -->
     <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
      <div class="w3-container">
@@ -21,7 +14,6 @@
 
      <div id="div-nav-drawer" class="w3-bar-block">
        <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
-       <!-- <a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-users fa-fw"></i>  Choropleth</a> -->
 
      </div>
     </nav>
@@ -96,23 +88,29 @@
        </div>
      </div>
 
+    
+    
     <script>
     $(document).ready(function() {
       var ncrGeoJSONDump =  "<%= geoDump %>";
-      var obj = JSON.parse(ncrGeoJSONDump.replace(/&#34;/g, '"'));
+      var dataObj = JSON.parse(ncrGeoJSONDump.replace(/&#34;/g, '"'));
 
-      var districtTableBodyData = "";
-
-      for (var i = 0; i < Object.keys(obj.features).length; i++) {
-        districtTableBodyData += "<tr><th class = 'matchTable boxable" + i + "'>" + obj.features[i].properties.DISTRICT + "</th><th class = 'reockAnalysis boxable" + i + "'>" + obj.features[i].properties.Reock.toFixed(3) + "</th><th class = 'polsbyAnalysis boxable" + i + "'>" + obj.features[i].properties.PolsbyPopper.toFixed(3) +
-         "</th><th class = 'schwartzbergAnalysis boxable" + i + "'>" + obj.features[i].properties.Schwartzberg.toFixed(3) + "</th><th class = 'colorAnalysis boxable" + i + "'>" + obj.features[i].properties.XSymmetry.toFixed(3) + "</th><th class = 'colorAnalysis boxable" + i + "'>" + obj.features[i].properties.LengthWidth.toFixed(3) +
-          "</th><th class = 'convexhullAnalysis boxable" + i + "'>" + obj.features[i].properties.ConvexHull.toFixed(3) + "</th></tr>";
+      //dynamic html table
+      for(let district in dataObj){
+        $('#districtTableBody')
+          .append($('<tr></tr>').attr('id', district)
+            .append($('<th></th').addClass(`matchTable boxable${district}`).text(district))
+            .append($('<th></th').addClass(`reockAnalysis boxable${district}`).text(dataObj[district]['Reock'].toFixed(3)))
+            .append($('<th></th').addClass(`polsbyAnalysis boxable${district}`).text(dataObj[district]['PolsbyPopper'].toFixed(3)))
+            .append($('<th></th').addClass(`schwartzbergAnalysis boxable${district}`).text(dataObj[district]['Schwartzberg'].toFixed(3)))
+            .append($('<th></th').addClass(`colorAnalysis boxable${district}`).text(dataObj[district]['XSymmetry'].toFixed(3)))
+            .append($('<th></th').addClass(`colorAnalysis boxable${district}`).text(dataObj[district]['LengthWidth'].toFixed(3)))
+            .append($('<th></th').addClass(`convexhullAnalysis boxable${district}`).text(dataObj[district]['ConvexHull'].toFixed(3))
+          )
+        ); 
       }
 
-      $('#districtTableBody').html(districtTableBodyData);
-      //var table = $('#districtTable').dataTable();
-      //table.row(':eq(0)', { page: 'current' }).select();
-      var oTable = $('#districtTable').DataTable( {
+      let oTable = $('#districtTable').DataTable( {
         scrollY:        600,
         scrollCollapse: true,
         paging:         false,
@@ -189,72 +187,52 @@
         }
       });
 
-      var currentRow = 0;
+      //highlight row and generate charts on hover
 
-      $('#districtTable tr').hover(function() {
-          $(this).addClass('purpleBox');
-      }, function() {
-          $(this).removeClass('hover');
+      $('#districtTableBody tr').hover(function(){
+        let district = $(this).attr('id');
+        highlightDistrict(district);
+        generateCharts(district);
+
+        //highlighting the rows with the good/bad/ok colors
+        $(`.boxable${district}.bad`).css('background-color', '#ff6666');
+        $(`.boxable${district}.good`).css('background-color', '#99ff99');
+        $(`.boxable${district}.okay`).css('background-color', '#ffe680');
+
+        console.log(`hovering at district ${district}`);
+        
+
+      }, function(){
+        resetAllHighlights();
+        let district = $(this).attr('id');
+
+        //reset all color highlights
+        $(`.boxable${district}.bad`).css('background-color', '');
+        $(`.boxable${district}.good`).css('background-color', '');
+        $(`.boxable${district}.okay`).css('background-color', '');
+        $(`.boxable${district}.bad`).css('box-shadow', 'inset 2px 2px 7px #c02424');
+        $(`.boxable${district}.good`).css('box-shadow', 'inset 2px 2px 7px #2cac2c');
+        $(`.boxable${district}.okay`).css('box-shadow', 'inset 2px 2px 7px #c4a62f');
+
       });
+      
 
-      var currentDistrict = 0;
-
-      oTable.$('tr').hover( function() {
-          currentRow = $('tr', this.parentNode).index(this) + 1;
-          resetAllHighlights();
-          highlightDistrict(currentRow);
-
-          for (var i = 0; i < Object.keys(obj.features).length; i++) {
-            if (obj.features[i].properties.DISTRICT == currentRow) {
-              generateCharts(i);
-              $(".boxable" + currentDistrict).each(function() {
-                // get text into variable
-                $(this).removeClass('purpleBox');
-              });
-              currentDistrict = i;
-              $(".boxable" + i).each(function() {
-                // get text into variable
-                $(this).addClass('purpleBox');
-              });
-            }
-          }
-
-
-          //generateCharts(currentRow);
-          $(this).addClass('purpleBox');
-          console.log("Hovering at District " + currentRow + ".");
-
-          var r = oTable.row( currentRow );
-                     r.to$().addClass( 'purpleBox');
-
-          //console.log($('tr', this.parentNode));
-
-          //$('tr', this.parentNode).index(this).addClass('purpleBox');
-          $('th:nth-child(0)').css('.purpleBox');
-      }, function() {
-          oTable.$('tr.highlighted').removeClass('highlighted');
-      } );
-
-      function generateCharts(row) {
-
-        // highlight map
-
-        //
+      function generateCharts(district) {
 
         var barChart = c3.generate({
             title: {
-                text: 'District ' + obj.features[row].properties.DISTRICT + ' Scores'
+                text:`District ${district} scores`
             },
             bindto: '#barChart',
             data: {
                 type: 'bar',
                 json: [
-                    { 'indicator': 'Reock', 'score': obj.features[row].properties.Reock.toFixed(3) },
-                    { 'indicator': 'Polsby-Popper', 'score': obj.features[row].properties.PolsbyPopper.toFixed(3) },
-                    { 'indicator': 'Schwartzberg', 'score': obj.features[row].properties.Schwartzberg.toFixed(3) },
-                    { 'indicator': 'X-Symmetry', 'score': obj.features[row].properties.XSymmetry.toFixed(3) },
-                    { 'indicator': 'Length-Width', 'score': obj.features[row].properties.LengthWidth.toFixed(3) },
-                    { 'indicator': 'Convex-Hull', 'score': obj.features[row].properties.ConvexHull.toFixed(3) }
+                    { 'indicator': 'Reock', 'score': dataObj[district]['Reock'].toFixed(3)},
+                    { 'indicator': 'Polsby-Popper', 'score': dataObj[district]['PolsbyPopper'].toFixed(3)},
+                    { 'indicator': 'Schwartzberg', 'score': dataObj[district]['Schwartzberg'].toFixed(3)},
+                    { 'indicator': 'X-Symmetry', 'score': dataObj[district]['XSymmetry'].toFixed(3)},
+                    { 'indicator': 'Length-Width', 'score': dataObj[district]['LengthWidth'].toFixed(3)},
+                    { 'indicator': 'Convex-Hull', 'score': dataObj[district]['ConvexHull'].toFixed(3)}
                 ],
                 keys: {
                     x: 'indicator',
@@ -263,14 +241,14 @@
                 labels: true
             },
             axis: {
-                    x: {
-                        type: 'category'
-                    },
-                    y: {
-                        max: 1,
-                        min: 0,
-                        padding: {top:0, bottom:0}
-                    }
+                x: {
+                    type: 'category'
+                },
+                y: {
+                    max: 1,
+                    min: 0,
+                    padding: {top:0, bottom:0}
+                }
             },
             bar: {
                 width: {
@@ -281,21 +259,21 @@
 
         var lengthwidthStateAverage = 0;
 
-        for (var i = 0; i < Object.keys(obj.features).length; i++) {
-          lengthwidthStateAverage += obj.features[i].properties.LengthWidth;
+        for(let district in dataObj){
+          lengthwidthStateAverage += dataObj[district]['LengthWidth']
         }
 
-        lengthwidthStateAverage = lengthwidthStateAverage / Object.keys(obj.features).length;
+        lengthwidthStateAverage = lengthwidthStateAverage / Object.keys(dataObj).length;
 
         var lengthwidthBarChart = c3.generate({
             title: {
-                text: 'District ' + obj.features[row].properties.DISTRICT + ' Length-Width'
+                text: 'District ' + district + ' Length-Width'
             },
             bindto: '#lengthwidthBarChart',
             data: {
                 type: 'bar',
                 json: [
-                    {  'indicator': 'District', 'score': obj.features[row].properties.LengthWidth.toFixed(3) },
+                    {  'indicator': 'District', 'score': dataObj[district]['LengthWidth'].toFixed(3) },
                     {  'indicator': 'State Average', 'score': lengthwidthStateAverage.toFixed(3) }
                 ],
                 keys: {
@@ -326,6 +304,5 @@
     });
 
     </script>
-    <!-- <div id = "geoDump"></div> -->
   </body>
 </html>

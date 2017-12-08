@@ -36,6 +36,13 @@ info.update = function(props) {
 }
 
 $(document).ready(function() {
+  $(document).ready(function () {
+    
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+    
+    });
 
   $('.button').click(function(){
     window.location = '../map'
@@ -46,12 +53,12 @@ $(document).ready(function() {
 
   // initialises map
   function initMap() {
-    map = L.map('map').setView([35, -80], 6);
+    map = L.map('map').setView([35, -80], 7);
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=sk.eyJ1IjoiaGV5aXRzbWVkeiIsImEiOiJjajk1bWQ5dmwxbWw5MzJwOXV4bm9hM3JpIn0.sTN2b2Bjxh9mM7HsrCfbsg', {
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
       maxZoom: 18,
-      id: 'mapbox.streets',
+      id: 'mapbox.light',
       accessToken: 'sk.eyJ1IjoiaGV5aXRzbWVkeiIsImEiOiJjajk1bWQ5dmwxbWw5MzJwOXV4bm9hM3JpIn0.sTN2b2Bjxh9mM7HsrCfbsg'
     }).addTo(map);
 

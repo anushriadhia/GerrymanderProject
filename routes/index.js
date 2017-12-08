@@ -1,10 +1,12 @@
 var express = require('express');
 var router = express.Router();
 var R = require("r-script");
-
-// Read Synchrously
 var fs = require("fs");
-var content = fs.readFileSync("public/ncr.geojson");
+
+for (let district in ncrGeoText){
+    console.log(ncrGeoText[district]['Reock'])
+}
+    
 
 /* GET home page. */
 router.get('/', function(req, res, next){
@@ -14,8 +16,18 @@ router.get('/', function(req, res, next){
 
 
 router.get('/map', function(req, res, next) {
-    var ncrGeoText = JSON.parse(fs.readFileSync("public/ncr.geojson"));
-    console.log(ncrGeoText);
+    let ncrGeoText = JSON.parse(fs
+        .readFileSync("public/ncr.geojson", 'utf8')
+        .replace(/&#34;/g, '"'))['features']
+        .reduce((total, current) => {
+            total[current.properties.DISTRICT] = current.properties;
+            return total;
+        }, {});
+
+    for (let district in ncrGeoText){
+        console.log(district)
+    }
+
     res.render('index', { title: 'Geographic Gerrymandering Detection', var1: 10, vec1: 20, geoDump: JSON.stringify(ncrGeoText).toString() });
 });
 
