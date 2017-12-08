@@ -3,11 +3,6 @@ var router = express.Router();
 var R = require("r-script");
 var fs = require("fs");
 
-for (let district in ncrGeoText){
-    console.log(ncrGeoText[district]['Reock'])
-}
-    
-
 /* GET home page. */
 router.get('/', function(req, res, next){
     res.render('home', {title: 'Geographic Gerrymandering Detection'});
