@@ -173,12 +173,6 @@ html,body,h1,h2,h3,h4,h5 {
   box-shadow: inset 3px 3px 7px #c02424;
 }
 
-.okay{
-  box-shadow: inset 3px 3px 7px #c4a62f
-}
-
-
-
 #districtTableBody:hover tr:not(:hover) th {
   opacity: .6;
   transition: opacity 0.2s ease-out;

@@ -197,7 +197,6 @@
         //highlighting the rows with the good/bad/ok colors
         $(`.boxable${district}.bad`).css('background-color', '#ff6666');
         $(`.boxable${district}.good`).css('background-color', '#99ff99');
-        $(`.boxable${district}.okay`).css('background-color', '#ffe680');
 
         console.log(`hovering at district ${district}`);
         
@@ -209,11 +208,6 @@
         //reset all color highlights
         $(`.boxable${district}.bad`).css('background-color', '');
         $(`.boxable${district}.good`).css('background-color', '');
-        $(`.boxable${district}.okay`).css('background-color', '');
-        $(`.boxable${district}.bad`).css('box-shadow', 'inset 2px 2px 7px #c02424');
-        $(`.boxable${district}.good`).css('box-shadow', 'inset 2px 2px 7px #2cac2c');
-        $(`.boxable${district}.okay`).css('box-shadow', 'inset 2px 2px 7px #c4a62f');
-
       });
       
 
