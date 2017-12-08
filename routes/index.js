@@ -23,8 +23,6 @@ router.get('/map', function(req, res, next) {
         console.log(district)
     }
 
-    var metricType = ['r', 'pp', 's', 'xs', 'lw', 'ch'];
-
     res.render('index', { title: 'Geographic Gerrymandering Detection', 
                             var1: 10, 
                             vec1: 20, 
