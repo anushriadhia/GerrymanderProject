@@ -96,7 +96,7 @@
       var dataObj = JSON.parse(ncrGeoJSONDump.replace(/&#34;/g, '"'));
 
       //dynamic html table
-      for(let district in dataObj){
+      for(var district in dataObj){
         $('#districtTableBody')
           .append($('<tr></tr>').attr('id', district)
             .append($('<th></th').addClass(`matchTable boxable${district}`).text(district))
@@ -110,7 +110,7 @@
         ); 
       }
 
-      let oTable = $('#districtTable').DataTable( {
+      var oTable = $('#districtTable').DataTable( {
         scrollY:        600,
         scrollCollapse: true,
         paging:         false,
@@ -190,7 +190,7 @@
       //highlight row and generate charts on hover
 
       $('#districtTableBody tr').hover(function(){
-        let district = $(this).attr('id');
+        var district = $(this).attr('id');
         highlightDistrict(district);
         generateCharts(district);
 
@@ -204,7 +204,7 @@
 
       }, function(){
         resetAllHighlights();
-        let district = $(this).attr('id');
+        var district = $(this).attr('id');
 
         //reset all color highlights
         $(`.boxable${district}.bad`).css('background-color', '');
@@ -259,7 +259,7 @@
 
         var lengthwidthStateAverage = 0;
 
-        for(let district in dataObj){
+        for(var district in dataObj){
           lengthwidthStateAverage += dataObj[district]['LengthWidth']
         }
 

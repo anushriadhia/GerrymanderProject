@@ -11,7 +11,7 @@ router.get('/', function(req, res, next){
 
 
 router.get('/map', function(req, res, next) {
-    let ncrGeoText = JSON.parse(fs
+    var ncrGeoText = JSON.parse(fs
         .readFileSync("public/ncr.geojson", 'utf8')
         .replace(/&#34;/g, '"'))['features']
         .reduce((total, current) => {
@@ -19,7 +19,7 @@ router.get('/map', function(req, res, next) {
             return total;
         }, {});
 
-    for (let district in ncrGeoText){
+    for (var district in ncrGeoText){
         console.log(district)
     }
 
