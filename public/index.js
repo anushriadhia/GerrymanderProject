@@ -150,6 +150,14 @@ $(document).ready(function() {
   */
   function zoomToFeature(e) {
     defaultFeature = e;
+    var layer = e.target;
+    var district = layer.feature.properties.DISTRICT
+
+    $(`.boxable${district}.bad`).css('background-color', '');
+    $(`.boxable${district}.good`).css('background-color', '');
+
+    $(`.boxable${district}.bad`).css('background-color', '#ff6666');
+    $(`.boxable${district}.good`).css('background-color', '#99ff99');
   }
 
   /**
