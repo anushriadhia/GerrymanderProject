@@ -37,11 +37,11 @@ info.update = function(props) {
 
 $(document).ready(function() {
   $(document).ready(function () {
-    
+
         $('#sidebarCollapse').on('click', function () {
             $('#sidebar').toggleClass('active');
         });
-    
+
     });
 
   $('.button').click(function(){
@@ -198,7 +198,7 @@ $(document).ready(function() {
   function addMetricsRow(metricIndex) {
     var $metricsTable = $('#metrics-table');
 
-    var newElem = '<tr id="metricsRow' + metricIndex + '"> <td><i class="fa fa-user w3-text-blue w3-large"></i></td> <td>' + metricsList[metricIndex] +
+    var newElem = '<tr id="metricsRow' + metricIndex + '"> <td><i class="fa fa-map w3-text-blue w3-large"></i></td> <td>' + metricsList[metricIndex] +
     '</td> <td id="metricsRowValue' + metricIndex + '"></td> </tr>';
 
     $('#metrics-table').append(newElem);
@@ -223,7 +223,7 @@ $(document).ready(function() {
   function addNavRow(mapIndex) {
     // html for new row
     var newElem = '<a href="#" id="navItem' + mapIndex +
-    '" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>   ' + mapsList[mapIndex] + '</a>';
+    '" class="w3-bar-item w3-button w3-padding"><i class="fa fa-map fa-fw"></i>   ' + mapsList[mapIndex] + '</a>';
 
     $('#div-nav-drawer').append(newElem);
     console.log('Added ' + mapsList[mapIndex] + " with index " + mapIndex);

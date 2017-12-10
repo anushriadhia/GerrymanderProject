@@ -6,9 +6,147 @@
     <!-- Sidebar/menu -->
     <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
      <div class="w3-container">
-       <h5>Upload Files</h5>
+       <h5>Select Measure Boundaries</h5>
+      <select id="boundarySelect" onchange="changeBoundary()">
+        <option value="state average">State Average
+        <option value="median">Median
+        <option value="custom">Custom
+      </select>
+
+      <div id="boundaryType"></div>
+      <div id="customBoundarySelect" style="display: none;">
+        Reock: <input type="text" id="reockBoundary" placeholder="0.5"><br>
+        Polsby-Popper: <input type="text" id="polsbyPopperBoundary" placeholder="0.5"><br>
+        Schwartzberg: <input type="text" id="schwartzbergBoundary" placeholder="0.5"><br>
+        Convex-Hull: <input type="text" id="convexHullBoundary" placeholder="0.5"><br>
+        Length-Width: <input type="text" id="lengthWidthBoundary" placeholder="0.5"><br>
+        X-Symmetry: <input type="text" id="xSymmetryBoundary" placeholder="0.5"><br>
+        <input type="submit" value="Submit" onclick = "getBoundaryInput()">
+      </div>
+
+      <script>
+
+      var reockDiv = 0;
+      var polsbyPopperDiv = 0;
+      var schwartzbergDiv = 0;
+      var convexHullDiv = 0;
+      var lengthWidthDiv = 0;
+      var xSymmetryDiv = 0;
+
+      function colorTable(metric, target){
+        $(metric).each(function(){
+          var colText = $(this).text();
+
+          if(colText <= target){
+            $(this).removeClass('bad');
+            $(this).addClass('good');
+          } else {
+            $(this).removeClass('good');
+            $(this).addClass('bad');
+          }
+        });
+      }
+
+      //highlight row and generate charts on hover
+      $('#districtTableBody tr').hover(function(){
+        var district = $(this).attr('id');
+        highlightDistrict(district);
+        //generateCharts(district);
+
+        //highlighting the rows with the good/bad/ok colors
+        $(`.boxable${district}.bad`).css('background-color', '#ff6666');
+        $(`.boxable${district}.good`).css('background-color', '#99ff99');
+
+      }, function(){
+        resetAllHighlights();
+        var district = $(this).attr('id');
+
+        //reset all color highlights
+        $(`.boxable${district}.bad`).css('background-color', '');
+        $(`.boxable${district}.good`).css('background-color', '');
+      });
+
+      function getBoundaryInput() {
+        if (reockBoundary.value.length == 0) {
+          console.log("Reock is null.");
+        }
+        else {
+          reockDiv = Number($('#reockBoundary').val());
+          colorTable(".reockAnalysis", reockDiv);
+        }
+
+        if (polsbyPopperBoundary.value.length == 0) {
+          console.log("Polsby-Popper is null.");
+        }
+        else {
+          polsbyPopperDiv = Number($('#polsbyPopperBoundary').val());
+          colorTable(".polsbyAnalysis", polsbyPopperDiv);
+        }
+
+        if (schwartzbergBoundary.value.length == 0) {
+          console.log("Schwartzberg is null.");
+        }
+        else {
+          schwartzbergDiv = Number($('#schwartzbergBoundary').val());
+          colorTable(".schwartzbergAnalysis", schwartzbergDiv);
+        }
+
+        if (convexHullBoundary.value.length == 0) {
+          console.log("Convex-Hull is null.");
+        }
+        else {
+          convexHullDiv = Number($('#convexHullBoundary').val());
+          colorTable(".convexHullAnalysis", convexHullDiv);
+        }
+
+        if (lengthWidthBoundary.value.length == 0) {
+          console.log("Length-Width is null.");
+        }
+        else {
+          lengthWidthDiv = Number($('#lengthWidthBoundary').val());
+          colorTable(".lengthWidthAnalysis", lengthWidthDiv);
+        }
+
+        if (xSymmetryBoundary.value.length == 0) {
+          console.log("X-Symmetry is null.");
+        }
+        else {
+          xSymmetryDiv = Number($('#xSymmetryBoundary').val());
+          colorTable(".xSymmetryAnalysis", xSymmetryDiv);
+        }
+      }
+
+      function changeBoundary() {
+          var boundarySelectResponse = document.getElementById("boundarySelect").value;
+          if (boundarySelectResponse == "custom") {
+            $('#boundaryType').html("Enter custom boundaries between 0 and 1:");
+            $('#customBoundarySelect').show();
+          }
+          else if (boundarySelectResponse == "median") {
+            $('#customBoundarySelect').hide();
+            $('#boundaryType').html("Now displaying " + boundarySelectResponse + " boundaries.");
+            colorTable(".reockAnalysis", .5);
+            colorTable(".polsbyAnalysis", .5);
+            colorTable(".schwartzbergAnalysis", .5);
+            colorTable(".convexHullAnalysis", .5);
+            colorTable(".xSymmetryAnalysis", .5);
+            colorTable(".lengthWidthAnalysis", .5);
+          }
+          else {
+            $('#customBoundarySelect').hide();
+            $('#boundaryType').html("Now displaying " + boundarySelectResponse + " boundaries.");
+            colorTable(".reockAnalysis", .289);
+            colorTable(".polsbyAnalysis", .095);
+            colorTable(".schwartzbergAnalysis", .308);
+            colorTable(".convexHullAnalysis", .494);
+            colorTable(".xSymmetryAnalysis", .6);
+            colorTable(".lengthWidthAnalysis", .6);
+          }
+      }
+      </script>
+       <!-- <h5>Upload Files</h5>
        .shp <input id="shp" type="file" name=".shp" />
-       .dbf <input id="dbf" type="file" name=".dbf" />
+       .dbf <input id="dbf" type="file" name=".dbf" /> -->
        <h5>Map Types</h5>
       </div>
 
@@ -25,7 +163,7 @@
     <div class="w3-main" style="margin-left:300px;margin-top:43px;">
 
     <!-- <p>View project at <a href="http://github.com/wavded/js-shapefile-to-geojson">http://github.com/wavded/js-shapefile-to-geojson</a>. -->
-    <script src="http://rs1.adc4gis.com/js/openlayers/2.9.1/OpenLayers-Proj4.js"></script>
+    <!-- <script src="http://rs1.adc4gis.com/js/openlayers/2.9.1/OpenLayers-Proj4.js"></script>
     <script src="stream.js"></script>
     <script src="shapefile.js"></script>
     <script src="dbf.js"></script>
@@ -58,7 +196,7 @@
             document.getElementById('shp').addEventListener('change', onchange, false);
             document.getElementById('dbf').addEventListener('change', onchange, false);
         }
-    </script>
+    </script> -->
 
      <div class="w3-panel">
        <div class="w3-row-padding" style="margin:0 -16px">
@@ -88,8 +226,8 @@
        </div>
      </div>
 
-    
-    
+
+
     <script>
     $(document).ready(function() {
       var ncrGeoJSONDump =  "<%= geoDump %>";
@@ -103,11 +241,11 @@
             .append($('<th></th').addClass(`reockAnalysis boxable${district}`).text(dataObj[district]['Reock'].toFixed(3)))
             .append($('<th></th').addClass(`polsbyAnalysis boxable${district}`).text(dataObj[district]['PolsbyPopper'].toFixed(3)))
             .append($('<th></th').addClass(`schwartzbergAnalysis boxable${district}`).text(dataObj[district]['Schwartzberg'].toFixed(3)))
-            .append($('<th></th').addClass(`colorAnalysis boxable${district}`).text(dataObj[district]['XSymmetry'].toFixed(3)))
-            .append($('<th></th').addClass(`colorAnalysis boxable${district}`).text(dataObj[district]['LengthWidth'].toFixed(3)))
-            .append($('<th></th').addClass(`convexhullAnalysis boxable${district}`).text(dataObj[district]['ConvexHull'].toFixed(3))
+            .append($('<th></th').addClass(`xSymmetryAnalysis boxable${district}`).text(dataObj[district]['XSymmetry'].toFixed(3)))
+            .append($('<th></th').addClass(`lengthWidthAnalysis boxable${district}`).text(dataObj[district]['LengthWidth'].toFixed(3)))
+            .append($('<th></th').addClass(`convexHullAnalysis boxable${district}`).text(dataObj[district]['ConvexHull'].toFixed(3))
           )
-        ); 
+        );
       }
 
       var oTable = $('#districtTable').DataTable( {
@@ -116,6 +254,7 @@
         paging:         false,
         fixedColumns:   true,
         select:         true,
+        searching: false,
         columnDefs: [
             {
                 className: 'mdl-data-table__cell--non-numeric'
@@ -128,8 +267,9 @@
       colorTable(".reockAnalysis", .289);
       colorTable(".polsbyAnalysis", .095);
       colorTable(".schwartzbergAnalysis", .308);
-      colorTable(".convexhullAnalysis", .494);
-      colorTable(".colorAnalysis", .6);
+      colorTable(".convexHullAnalysis", .494);
+      colorTable(".xSymmetryAnalysis", .6);
+      colorTable(".lengthWidthAnalysis", .6);
 
       function colorTable(metric, target){
         $(metric).each(function(){
@@ -165,7 +305,7 @@
         $(`.boxable${district}.bad`).css('background-color', '');
         $(`.boxable${district}.good`).css('background-color', '');
       });
-      
+
 
       function generateCharts(district) {
 
