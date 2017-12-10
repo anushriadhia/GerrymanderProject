@@ -1,8 +1,9 @@
-// names of metrics
-var metricsList = [];
+var map;  // map object created from Leaflet
 
-// names of maps
-var mapsList = [];
+
+var metricsList = []; // names of metrics
+
+var mapsList = []; // names of maps
 
 var featureList = [];
 
@@ -12,7 +13,7 @@ var layer;
 
 var geojson;
 
-var map;
+
 
 var defaultFeature;
 
@@ -38,11 +39,11 @@ info.update = function(props) {
 $(document).ready(function() {
   $(document).ready(function () {
 
-        $('#sidebarCollapse').on('click', function () {
-            $('#sidebar').toggleClass('active');
-        });
-
+    $('#sidebarCollapse').on('click', function () {
+      $('#sidebar').toggleClass('active');
     });
+
+  });
 
   $('.button').click(function(){
     window.location = '../map'
@@ -51,7 +52,9 @@ $(document).ready(function() {
 
   initMap();
 
-  // initialises map
+  /**
+  * Initialises map for showing districts. Should only be called once
+  */
   function initMap() {
     map = L.map('map').setView([35, -80], 7);
 
@@ -65,7 +68,7 @@ $(document).ready(function() {
 
     // temporary
     var xmlhttp = new XMLHttpRequest();
-    var jsonMap;
+    var jsonMap;  // contains geojson data about the map to display
     var hasDefault = false;
     xmlhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
@@ -73,6 +76,7 @@ $(document).ready(function() {
         jsonMap = JSON.parse(this.responseText);
         L.geoJSON(jsonMap, {style: districtStyle}).addTo(map);  // adds geojson districts to map with style given in style()
 
+        // gets list of properties from geojson file to determine list of map types
         var propertiesList = Object.keys(jsonMap.features[0].properties);
 
         for(i = 1; i < propertiesList.length; i++) {
@@ -94,47 +98,94 @@ $(document).ready(function() {
     };
     xmlhttp.open("GET", "ncr.geojson", true);
     xmlhttp.send();
-    //
 
     info.addTo(map);
-
   }
 
-  function mapItemOnClick($item, name, jsonMap) {
-    featureList = [];
-    return function() {
-      clearMapItemHighlights();
-      $item.addClass('w3-blue');
-      selectedMap = name;
+  /**
+  * Removes the current layer from the map, and replaces it with a new one
+  */
+  function resetMap(jsonMap) {
+    if(layer != null)
+      layer.removeFrom(map);
 
-      if(layer != null)
-        layer.removeFrom(map);
-
-      layer = L.geoJSON(jsonMap, {style: districtStyle, onEachFeature: onEachFeature});
+    layer = L.geoJSON(jsonMap, {style: districtStyle, onEachFeature: onEachFeature});
 
 
-      geojson = layer.addTo(map);
-    }
+    geojson = layer.addTo(map);
   }
 
-  // determines what colour a district should be, based on a given value d (reock)
-  function getColor(d) {
-    return d > 0.75 ? '#FFEDA0' :
-    d > 0.6  ? '#FED976' :
-    d > 0.5  ? '#FEB24C' :
-    d > 0.45  ? '#FD8D3C' :
-    d > 0.4   ? '#FC4E2A' :
-    d > 0.3   ? '#E31A1C' :
-    d > 0.15   ? '#BD0026' :
-    '#800026';
+  /**
+  * Defines functions to be called for mouse events (click, mouseover, etc.) that occurs on each district
+  */
+  function onEachFeature(feature, layer) {
+    var listItem = {district: feature.properties.DISTRICT, layer: layer};
+    featureList.push(listItem); // adds feature to feature list
+
+    layer.on({
+      mouseover: highlightFeature,
+      mouseout: resetHighlight,
+      click: zoomToFeature
+    });
   }
 
-  // determines how districts on map look
+  /**
+  * Highlights the district where the mouse event occured
+  */
+  function highlightFeature(e) {
+    var layer = e.target;
+
+    highlightLayer(layer);
+  }
+
+  /**
+  * Resets highlights for the district where the mouse event occured
+  */
+  function resetHighlight(e) {
+    resetLayerHighlight(e.target);
+  }
+
+  /**
+  *
+  */
+  function zoomToFeature(e) {
+    defaultFeature = e;
+  }
+
+  /**
+  * Creates a new map item to display on the map types menu
+  */
+  function newMap(nameStr) {
+    mapsList.push(nameStr);
+    var index = mapsList.length - 1;
+    addNavRow(index);
+
+    $mapItem = $('#navItem' + index);
+
+    return $mapItem;
+  }
+
+  /**
+  * Adds a row to the map types navigation menu only.
+  * Only adds html to relevant section, without interactivity.
+  */
+  function addNavRow(mapIndex) {
+    // html for new row
+    var newElem = '<a href="#" id="navItem' + mapIndex +
+    '" class="w3-bar-item w3-button w3-padding"><i class="fa fa-map fa-fw"></i>   ' + mapsList[mapIndex] + '</a>';
+
+    $('#div-nav-drawer').append(newElem);
+  }
+
+  /**
+  * Determines the style for districts on the map
+  */
   function districtStyle(feature) {
     var property = null;
 
+    // loop through existing properties to see if the name is the same
+    //  as the currently selected map
     for(var prop in feature.properties) {
-      // console.log(prop + ' vs ' + selectedMap + ' for ' );
       if(prop == selectedMap) {
         property = prop;
       }
@@ -150,85 +201,37 @@ $(document).ready(function() {
     };
   }
 
-
-
-  function highlightFeature(e) {
-    var layer = e.target;
-
-    highlightLayer(layer);
-  }
-
-  function resetHighlight(e) {
-    resetLayerHighlight(e.target);
-  }
-
-  function zoomToFeature(e) {
-    defaultFeature = e;
-  }
-
-  function onEachFeature(feature, layer) {
-    var listItem = {district: feature.properties.DISTRICT, layer: layer};
-    featureList.push(listItem);
-
-    layer.on({
-      mouseover: highlightFeature,
-      mouseout: resetHighlight,
-      click: zoomToFeature
-    });
-
-
-  }
-
-  function setWarningsText(text) {
-    $('#warnings-text').text(text);
-  }
-
-  function setSafeMetricsText(text) {
-    $('#safe-metrics-text').text(text);
-  }
-
-  function newMetric(nameStr) {
-    metricsList.push(nameStr);
-    var index = metricsList.length - 1;
-    addMetricsRow(index);
-
-    $metricRow = $('#metricsRow' + index);
-  }
-
-  function addMetricsRow(metricIndex) {
-    var $metricsTable = $('#metrics-table');
-
-    var newElem = '<tr id="metricsRow' + metricIndex + '"> <td><i class="fa fa-map w3-text-blue w3-large"></i></td> <td>' + metricsList[metricIndex] +
-    '</td> <td id="metricsRowValue' + metricIndex + '"></td> </tr>';
-
-    $('#metrics-table').append(newElem);
-  }
-
-  function setMetricValue(metricIndex, metricValue) {
-    $('#metricsRowValue' + metricIndex).html(metricValue);
+  /**
+  * Determines what colour a district should be, based on a given value d
+  */
+  function getColor(d) {
+    return d > 0.75 ? '#FFEDA0' :
+    d > 0.6  ? '#FED976' :
+    d > 0.5  ? '#FEB24C' :
+    d > 0.45  ? '#FD8D3C' :
+    d > 0.4   ? '#FC4E2A' :
+    d > 0.3   ? '#E31A1C' :
+    d > 0.15   ? '#BD0026' :
+    '#800026';
   }
 
 
-  function newMap(nameStr) {
-    mapsList.push(nameStr);
-    var index = mapsList.length - 1;
-    addNavRow(index);
-
-    $mapItem = $('#navItem' + index);
-
-    return $mapItem;
+  /**
+  * Called when a map type is selected from the menu
+  */
+  function mapItemOnClick($item, name, jsonMap) {
+    featureList = []; // empty list of features
+    return function() {
+      clearMapItemHighlights();
+      $item.addClass('w3-blue');
+      selectedMap = name;
+      resetMap(jsonMap);
+    }
   }
 
-  // adds a row for a metric graph
-  function addNavRow(mapIndex) {
-    // html for new row
-    var newElem = '<a href="#" id="navItem' + mapIndex +
-    '" class="w3-bar-item w3-button w3-padding"><i class="fa fa-map fa-fw"></i>   ' + mapsList[mapIndex] + '</a>';
-
-    $('#div-nav-drawer').append(newElem);
-    console.log('Added ' + mapsList[mapIndex] + " with index " + mapIndex);
-  }
-
+  /**
+  * Removes all blue highlights from map types menu
+  */
   function clearMapItemHighlights() {
     for(var i = 0; i < mapsList.length; i++) {
       $('#navItem' + i).removeClass('w3-blue');
@@ -238,13 +241,8 @@ $(document).ready(function() {
 });
 
 /**
-  * Clears all highlights for the given layer
-  */
-function resetLayerHighlight(layer) {
-  geojson.resetStyle(layer);
-  info.update();
-}
-
+* Resets highlights for all districts on the map
+*/
 function resetAllHighlights() {
   for(var i = 0; i < featureList.length; i++) {
     resetLayerHighlight(featureList[i].layer);
@@ -252,8 +250,22 @@ function resetAllHighlights() {
 }
 
 /**
-  * Highlights a layer on the map
-  */
+* Highlights a district on the map, depending on the given district number
+*/
+function highlightDistrict(number) {
+  for(var i = 0; i < featureList.length; i++) {
+    if(number == featureList[i].district) {
+      console.log(featureList[i].layer);
+      highlightLayer(featureList[i].layer);
+
+      return;
+    }
+  }
+}
+
+/**
+* Highlights a layer on the map
+*/
 function highlightLayer(layer) {
   layer.setStyle({
     weight: 5,
@@ -271,17 +283,11 @@ function highlightLayer(layer) {
 }
 
 /**
-  * Highlights a district on the map, depending on the given district number
-  */
-function highlightDistrict(number) {
-  for(var i = 0; i < featureList.length; i++) {
-    if(number == featureList[i].district) {
-      console.log(featureList[i].layer);
-      highlightLayer(featureList[i].layer);
-
-      return;
-    }
-  }
+* Clears all highlights for the given layer
+*/
+function resetLayerHighlight(layer) {
+  geojson.resetStyle(layer);
+  info.update();
 }
 
 //******************************************************
@@ -307,13 +313,3 @@ function w3_close() {
   mySidebar.style.display = "none";
   overlayBg.style.display = "none";
 }
-
-
-// newMetric("lool");
-// newMetric("iu");
-
-//var $mapItem = newMap("Google Map");
-// var gmap = initMap();
-
-// setWarningsText("None");
-// setSafeMetricsText("None");
