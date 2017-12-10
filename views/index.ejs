@@ -8,7 +8,7 @@
      <div class="w3-container">
        <h5>Select Measure Boundaries</h5>
       <select id="boundarySelect" onchange="changeBoundary()">
-        <option value="state average">State Average
+        <option value="original">Original Gerrymander
         <option value="median">Median
         <option value="custom">Custom
       </select>
@@ -25,6 +25,7 @@
       </div>
 
       <script>
+      $('#boundaryType').html("Now displaying original boundaries.<br>Reock: 0.289<br>Polsby-Popper: 0.095<br>Schwartzberg: 0.308<br>Convex-Hull: 0.494<br>X-Symmetry: 0.600<br>Length-Width: 0.600");
 
       var reockDiv = 0;
       var polsbyPopperDiv = 0;
@@ -124,7 +125,7 @@
           }
           else if (boundarySelectResponse == "median") {
             $('#customBoundarySelect').hide();
-            $('#boundaryType').html("Now displaying " + boundarySelectResponse + " boundaries.");
+            $('#boundaryType').html("Now displaying " + boundarySelectResponse + " boundaries.<br>Reock: 0.500<br>Polsby-Popper: 0.500<br>Schwartzberg: 0.500<br>Convex-Hull: 0.500<br>X-Symmetry: 0.500<br>Length-Width: 0.500");
             colorTable(".reockAnalysis", .5);
             colorTable(".polsbyAnalysis", .5);
             colorTable(".schwartzbergAnalysis", .5);
@@ -134,7 +135,7 @@
           }
           else {
             $('#customBoundarySelect').hide();
-            $('#boundaryType').html("Now displaying " + boundarySelectResponse + " boundaries.");
+            $('#boundaryType').html("Now displaying " + boundarySelectResponse + " boundaries.<br>Reock: 0.289<br>Polsby-Popper: 0.095<br>Schwartzberg: 0.308<br>Convex-Hull: 0.494<br>X-Symmetry: 0.600<br>Length-Width: 0.600");
             colorTable(".reockAnalysis", .289);
             colorTable(".polsbyAnalysis", .095);
             colorTable(".schwartzbergAnalysis", .308);
