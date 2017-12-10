@@ -143,10 +143,8 @@
             colorTable(".lengthWidthAnalysis", .6);
           }
       }
+
       </script>
-       <!-- <h5>Upload Files</h5>
-       .shp <input id="shp" type="file" name=".shp" />
-       .dbf <input id="dbf" type="file" name=".dbf" /> -->
        <h5>Map Types</h5>
       </div>
 
@@ -161,6 +159,8 @@
 
     <!-- !PAGE CONTENT! -->
     <div class="w3-main" style="margin-left:300px;margin-top:43px;">
+
+    <!-- The following commented code is for the possibility of having an upload capability-->
 
     <!-- <p>View project at <a href="http://github.com/wavded/js-shapefile-to-geojson">http://github.com/wavded/js-shapefile-to-geojson</a>. -->
     <!-- <script src="http://rs1.adc4gis.com/js/openlayers/2.9.1/OpenLayers-Proj4.js"></script>
@@ -272,10 +272,6 @@
       function colorTable(metric, target){
         $(metric).each(function(){
 
-          // if (metric == ".reockAnalysis") {
-          //   reockColor = '#ff6666';
-          // }
-
           var colText = $(this).text();
 
           if(colText <= target){
@@ -305,16 +301,25 @@
         $(`.boxable${district}.good`).css('background-color', '');
       });
 
-      var reockColor = '#000000';
-      var polsbyPopperColor = '#000000';
-      var schwartzbergColor = '#000000';
-      var xSymmetryColor = '#000000';
-      var lengthWidthColor = '#000000';
-      var convexHullColor = '#000000';
+      
+      function findColor(className){
+          if ($(className).hasClass("good")){
+              return '#99ff99';
+          }
+          else{
+              return '#ff6666';
+          }
+      }
 
-      function generateCharts(district) {
+      function districtChart(district){
+        let BLACK = "#000000"
 
-        //console.log(dataObj[district]['PolsbyPopper'] instanceof '${district}.bad');
+        let reockColor = findColor(`.reockAnalysis.boxable${district}`) || BLACK;
+        let polsbyPopperColor = findColor(`.polsbyAnalysis.boxable${district}`) || BLACK;
+        let schwartzbergColor = findColor(`.schwartzbergAnalysis.boxable${district}`) || BLACK;
+        let xSymmetryColor = findColor(`.xSymmetryAnalysis.boxable${district}`) || BLACK;
+        let lengthWidthColor = findColor(`.lengthWidthAnalysis.boxable${district}`) || BLACK;
+        let convexHullColor = findColor(`.convexHullAnalysis.boxable${district}`) || BLACK;
 
         var barChart = c3.generate({
             title: {
@@ -362,24 +367,28 @@
             }
         });
 
-        var lengthwidthStateAverage = 0;
+          
+      }
+
+      function averageChart(metric, district){
+        let average = 0;
 
         for(var dist in dataObj){
-          lengthwidthStateAverage += dataObj[dist]['LengthWidth']
+          lengthwidthStateAverage += dataObj[dist][metric]
         }
 
-        lengthwidthStateAverage = lengthwidthStateAverage / Object.keys(dataObj).length;
+        average = average / Object.keys(dataObj).length;
 
         var lengthwidthBarChart = c3.generate({
             title: {
-                text: 'District ' + district + ' Length-Width'
+                text: `District ${district} ${metric}`
             },
             bindto: '#lengthwidthBarChart',
             data: {
                 type: 'bar',
                 columns: [
-                    ['District', dataObj[district]['LengthWidth'].toFixed(3) ],
-                    ['State Average', lengthwidthStateAverage.toFixed(3) ]
+                    ['District', dataObj[district][metric].toFixed(3) ],
+                    ['State Average', average.toFixed(3) ]
                 ],
                 colors: {
                     District: '#bbc007',
@@ -407,6 +416,7 @@
                 }
             }
         });
+
       }
 
 

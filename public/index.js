@@ -111,8 +111,6 @@ $(document).ready(function() {
         layer.removeFrom(map);
 
       layer = L.geoJSON(jsonMap, {style: districtStyle, onEachFeature: onEachFeature});
-
-
       geojson = layer.addTo(map);
     }
   }
