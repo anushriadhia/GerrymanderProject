@@ -226,8 +226,6 @@
        </div>
      </div>
 
-
-
     <script>
     $(document).ready(function() {
       var ncrGeoJSONDump =  "<%= geoDump %>";
@@ -273,6 +271,11 @@
 
       function colorTable(metric, target){
         $(metric).each(function(){
+
+          // if (metric == ".reockAnalysis") {
+          //   reockColor = '#ff6666';
+          // }
+
           var colText = $(this).text();
 
           if(colText <= target){
@@ -281,11 +284,7 @@
             $(this).addClass('bad');
           }
         });
-
       }
-
-
-
 
       //highlight row and generate charts on hover
       $('#districtTableBody tr').hover(function(){
@@ -306,8 +305,16 @@
         $(`.boxable${district}.good`).css('background-color', '');
       });
 
+      var reockColor = '#000000';
+      var polsbyPopperColor = '#000000';
+      var schwartzbergColor = '#000000';
+      var xSymmetryColor = '#000000';
+      var lengthWidthColor = '#000000';
+      var convexHullColor = '#000000';
 
       function generateCharts(district) {
+
+        //console.log(dataObj[district]['PolsbyPopper'] instanceof '${district}.bad');
 
         var barChart = c3.generate({
             title: {
@@ -316,17 +323,25 @@
             bindto: '#barChart',
             data: {
                 type: 'bar',
-                json: [
-                    { 'indicator': 'Reock', 'score': dataObj[district]['Reock'].toFixed(3)},
-                    { 'indicator': 'Polsby-Popper', 'score': dataObj[district]['PolsbyPopper'].toFixed(3)},
-                    { 'indicator': 'Schwartzberg', 'score': dataObj[district]['Schwartzberg'].toFixed(3)},
-                    { 'indicator': 'X-Symmetry', 'score': dataObj[district]['XSymmetry'].toFixed(3)},
-                    { 'indicator': 'Length-Width', 'score': dataObj[district]['LengthWidth'].toFixed(3)},
-                    { 'indicator': 'Convex-Hull', 'score': dataObj[district]['ConvexHull'].toFixed(3)}
+                columns: [
+                    ['Reock', dataObj[district]['Reock'].toFixed(3)],
+                    ['PolsbyPopper', dataObj[district]['PolsbyPopper'].toFixed(3)],
+                    ['Schwartzberg', dataObj[district]['Schwartzberg'].toFixed(3)],
+                    ['XSymmetry', dataObj[district]['XSymmetry'].toFixed(3)],
+                    ['LengthWidth', dataObj[district]['LengthWidth'].toFixed(3)],
+                    ['ConvexHull', dataObj[district]['ConvexHull'].toFixed(3)]
                 ],
                 keys: {
                     x: 'indicator',
                     value: ['score']
+                },
+                colors: {
+                    Reock: reockColor,
+                    PolsbyPopper: polsbyPopperColor,
+                    Schwartzberg: schwartzbergColor,
+                    XSymmetry: xSymmetryColor,
+                    LengthWidth: lengthWidthColor,
+                    ConvexHull: convexHullColor
                 },
                 labels: true
             },
@@ -362,10 +377,14 @@
             bindto: '#lengthwidthBarChart',
             data: {
                 type: 'bar',
-                json: [
-                    {  'indicator': 'District', 'score': dataObj[district]['LengthWidth'].toFixed(3) },
-                    {  'indicator': 'State Average', 'score': lengthwidthStateAverage.toFixed(3) }
+                columns: [
+                    ['District', dataObj[district]['LengthWidth'].toFixed(3) ],
+                    ['State Average', lengthwidthStateAverage.toFixed(3) ]
                 ],
+                colors: {
+                    District: '#bbc007',
+                    StateAverage: '#007bbc'
+                },
                 keys: {
                     x: 'indicator',
                     value: ['score']
