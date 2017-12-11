@@ -67,50 +67,32 @@
       });
 
       function getBoundaryInput() {
-        if (reockBoundary.value.length == 0) {
-          console.log("Reock is null.");
-        }
-        else {
+        if (reockBoundary.value.length != 0) {
           reockDiv = Number($('#reockBoundary').val());
           colorTable(".reockAnalysis", reockDiv);
         }
 
-        if (polsbyPopperBoundary.value.length == 0) {
-          console.log("Polsby-Popper is null.");
-        }
-        else {
+        if (polsbyPopperBoundary.value.length != 0) {
           polsbyPopperDiv = Number($('#polsbyPopperBoundary').val());
           colorTable(".polsbyAnalysis", polsbyPopperDiv);
         }
 
-        if (schwartzbergBoundary.value.length == 0) {
-          console.log("Schwartzberg is null.");
-        }
-        else {
+        if (schwartzbergBoundary.value.length != 0) {
           schwartzbergDiv = Number($('#schwartzbergBoundary').val());
           colorTable(".schwartzbergAnalysis", schwartzbergDiv);
         }
 
-        if (convexHullBoundary.value.length == 0) {
-          console.log("Convex-Hull is null.");
-        }
-        else {
+        if (convexHullBoundary.value.length != 0) {
           convexHullDiv = Number($('#convexHullBoundary').val());
           colorTable(".convexHullAnalysis", convexHullDiv);
         }
 
-        if (lengthWidthBoundary.value.length == 0) {
-          console.log("Length-Width is null.");
-        }
-        else {
+        if (lengthWidthBoundary.value.length != 0) {
           lengthWidthDiv = Number($('#lengthWidthBoundary').val());
           colorTable(".lengthWidthAnalysis", lengthWidthDiv);
         }
 
-        if (xSymmetryBoundary.value.length == 0) {
-          console.log("X-Symmetry is null.");
-        }
-        else {
+        if (xSymmetryBoundary.value.length != 0) {
           xSymmetryDiv = Number($('#xSymmetryBoundary').val());
           colorTable(".xSymmetryAnalysis", xSymmetryDiv);
         }
@@ -269,138 +251,67 @@
       colorTable(".xSymmetryAnalysis", .6);
       colorTable(".lengthWidthAnalysis", .6);
 
-      function colorTable(metric, target){
-        $(metric).each(function(){
-
-          var colText = $(this).text();
-
-          if(colText <= target){
-            $(this).addClass('good');
-          } else {
-            $(this).addClass('bad');
-          }
-        });
-      }
-
       //highlight row and generate charts on hover
-      $('#districtTableBody tr').hover(function(){
-        var district = $(this).attr('id');
-        highlightDistrict(district);
-        generateCharts(district);
+        $('#districtTableBody tr').hover(function(){
+            var district = $(this).attr('id');
+            highlightDistrict(district);
+            districtChart(district);
+            averageChart(district);
 
-        //highlighting the rows with the good/bad/ok colors
-        $(`.boxable${district}.bad`).css('background-color', '#ff6666');
-        $(`.boxable${district}.good`).css('background-color', '#99ff99');
+            //highlighting the rows with the good/bad/ok colors
+            $(`.boxable${district}.bad`).css('background-color', '#ff6666');
+            $(`.boxable${district}.good`).css('background-color', '#99ff99');
 
-      }, function(){
-        resetAllHighlights();
-        var district = $(this).attr('id');
+        }, function(){
+            resetAllHighlights();
+            var district = $(this).attr('id');
 
-        //reset all color highlights
-        $(`.boxable${district}.bad`).css('background-color', '');
-        $(`.boxable${district}.good`).css('background-color', '');
-      });
-
-      
-      function findColor(className){
-          if ($(className).hasClass("good")){
-              return '#99ff99';
-          }
-          else{
-              return '#ff6666';
-          }
-      }
-
-      function districtChart(district){
-        let BLACK = "#000000"
-
-        let reockColor = findColor(`.reockAnalysis.boxable${district}`) || BLACK;
-        let polsbyPopperColor = findColor(`.polsbyAnalysis.boxable${district}`) || BLACK;
-        let schwartzbergColor = findColor(`.schwartzbergAnalysis.boxable${district}`) || BLACK;
-        let xSymmetryColor = findColor(`.xSymmetryAnalysis.boxable${district}`) || BLACK;
-        let lengthWidthColor = findColor(`.lengthWidthAnalysis.boxable${district}`) || BLACK;
-        let convexHullColor = findColor(`.convexHullAnalysis.boxable${district}`) || BLACK;
-
-        var barChart = c3.generate({
-            title: {
-                text:`District ${district} scores`
-            },
-            bindto: '#barChart',
-            data: {
-                type: 'bar',
-                columns: [
-                    ['Reock', dataObj[district]['Reock'].toFixed(3)],
-                    ['PolsbyPopper', dataObj[district]['PolsbyPopper'].toFixed(3)],
-                    ['Schwartzberg', dataObj[district]['Schwartzberg'].toFixed(3)],
-                    ['XSymmetry', dataObj[district]['XSymmetry'].toFixed(3)],
-                    ['LengthWidth', dataObj[district]['LengthWidth'].toFixed(3)],
-                    ['ConvexHull', dataObj[district]['ConvexHull'].toFixed(3)]
-                ],
-                keys: {
-                    x: 'indicator',
-                    value: ['score']
-                },
-                colors: {
-                    Reock: reockColor,
-                    PolsbyPopper: polsbyPopperColor,
-                    Schwartzberg: schwartzbergColor,
-                    XSymmetry: xSymmetryColor,
-                    LengthWidth: lengthWidthColor,
-                    ConvexHull: convexHullColor
-                },
-                labels: true
-            },
-            axis: {
-                x: {
-                    type: 'category'
-                },
-                y: {
-                    max: 1,
-                    min: 0,
-                    padding: {top:0, bottom:0}
-                }
-            },
-            bar: {
-                width: {
-                    ratio: .9
-                }
-            }
+            //reset all color highlights
+            $(`.boxable${district}.bad`).css('background-color', '');
+            $(`.boxable${district}.good`).css('background-color', '');
         });
 
-          
-      }
 
-      function averageChart(metric, district){
-        let average = 0;
+        function districtChart(district){
+            let BLACK = "#000000"
 
-        for(var dist in dataObj){
-          lengthwidthStateAverage += dataObj[dist][metric]
-        }
+            let reockColor = findColor(`.reockAnalysis.boxable${district}`) || BLACK;
+            let polsbyPopperColor = findColor(`.polsbyAnalysis.boxable${district}`) || BLACK;
+            let schwartzbergColor = findColor(`.schwartzbergAnalysis.boxable${district}`) || BLACK;
+            let xSymmetryColor = findColor(`.xSymmetryAnalysis.boxable${district}`) || BLACK;
+            let lengthWidthColor = findColor(`.lengthWidthAnalysis.boxable${district}`) || BLACK;
+            let convexHullColor = findColor(`.convexHullAnalysis.boxable${district}`) || BLACK;
 
-        average = average / Object.keys(dataObj).length;
-
-        var lengthwidthBarChart = c3.generate({
-            title: {
-                text: `District ${district} ${metric}`
-            },
-            bindto: '#lengthwidthBarChart',
-            data: {
-                type: 'bar',
-                columns: [
-                    ['District', dataObj[district][metric].toFixed(3) ],
-                    ['State Average', average.toFixed(3) ]
-                ],
-                colors: {
-                    District: '#bbc007',
-                    StateAverage: '#007bbc'
+            var barChart = c3.generate({
+                title: {
+                    text:`District ${district} scores`
                 },
-                keys: {
-                    x: 'indicator',
-                    value: ['score']
+                bindto: '#barChart',
+                data: {
+                    type: 'bar',
+                    columns: [
+                        ['Reock', dataObj[district]['Reock'].toFixed(3)],
+                        ['PolsbyPopper', dataObj[district]['PolsbyPopper'].toFixed(3)],
+                        ['Schwartzberg', dataObj[district]['Schwartzberg'].toFixed(3)],
+                        ['XSymmetry', dataObj[district]['XSymmetry'].toFixed(3)],
+                        ['LengthWidth', dataObj[district]['LengthWidth'].toFixed(3)],
+                        ['ConvexHull', dataObj[district]['ConvexHull'].toFixed(3)]
+                    ],
+                    keys: {
+                        x: 'indicator',
+                        value: ['score']
+                    },
+                    colors: {
+                        Reock: reockColor,
+                        PolsbyPopper: polsbyPopperColor,
+                        Schwartzberg: schwartzbergColor,
+                        XSymmetry: xSymmetryColor,
+                        LengthWidth: lengthWidthColor,
+                        ConvexHull: convexHullColor
+                    },
+                    labels: true
                 },
-                labels: true
-            },
-            axis: {
+                axis: {
                     x: {
                         type: 'category'
                     },
@@ -409,16 +320,73 @@
                         min: 0,
                         padding: {top:0, bottom:0}
                     }
-            },
-            bar: {
-                width: {
-                    ratio: .9
+                },
+                bar: {
+                    width: {
+                        ratio: .9
+                    }
                 }
+            });
+
+    
+        }
+
+        function averageChart(district){
+
+            if( $('#map').data('mapType')){
+                var metric = $('#map').data('mapType');
+            } else {
+                return;
             }
-        });
 
-      }
 
+            let average = 0;
+
+            for(var dist in dataObj){
+                average += dataObj[dist][metric]
+            }
+
+            average = average / Object.keys(dataObj).length;
+
+            var lengthwidthBarChart = c3.generate({
+                title: {
+                    text: `District ${district} ${metric}`
+                },
+                bindto: '#lengthwidthBarChart',
+                data: {
+                    type: 'bar',
+                    columns: [
+                        ['District', dataObj[district][metric].toFixed(3) ],
+                        ['State Average', average.toFixed(3) ]
+                    ],
+                    colors: {
+                        District: '#bbc007',
+                        StateAverage: '#007bbc'
+                    },
+                    keys: {
+                        x: 'indicator',
+                        value: ['score']
+                    },
+                    labels: true
+                },
+                axis: {
+                        x: {
+                            type: 'category'
+                        },
+                        y: {
+                            max: 1,
+                            min: 0,
+                            padding: {top:0, bottom:0}
+                        }
+                },
+                bar: {
+                    width: {
+                        ratio: .9
+                    }
+                }
+            });
+
+        }
 
     });
 
