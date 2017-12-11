@@ -36,10 +36,6 @@ info.update = function(props) {
   this._div.innerHTML = '<h4>' + selectedMap + '<h4>' + (props ? '<b>' + props.DISTRICT + '</b><br />' + Math.trunc(props[prop] * 1000) / 1000 : 'Hover over a district');
 }
 
-$('.button').click(function(){
-  window.location = '../map'
-});
-
 /**
 * Initialises map for showing districts. Should only be called once
 */

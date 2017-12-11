@@ -35,18 +35,23 @@
 </body>
 </html>
 <script>
-$(window).scroll( function(){
+    $(window).scroll( function(){
 
-    var topWindow = $(window).scrollTop();
-    var topWindow = topWindow * 1.5;
+        var topWindow = $(window).scrollTop();
+        var topWindow = topWindow * 1.5;
 
-    var windowHeight = $(window).height();
+        var windowHeight = $(window).height();
 
-    var position = topWindow / windowHeight;
-    position = 1 - position;
+        var position = topWindow / windowHeight;
+        position = 1 - position;
 
-    $('.arrow-wrap').css('opacity', position);
+        $('.arrow-wrap').css('opacity', position);
 
-});
+    });
+    $('.button').click(function(){
+            console.log("click me");
+            window.location = '../map'
+    });
+
 
 </script>
