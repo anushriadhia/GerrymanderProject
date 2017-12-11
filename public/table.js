@@ -12,10 +12,9 @@ function addTableBody(dataObj){
             .append($('<th></th').addClass(`reockAnalysis boxable${district}`).text(dataObj[district]['Reock'].toFixed(3)))
             .append($('<th></th').addClass(`polsbyAnalysis boxable${district}`).text(dataObj[district]['PolsbyPopper'].toFixed(3)))
             .append($('<th></th').addClass(`schwartzbergAnalysis boxable${district}`).text(dataObj[district]['Schwartzberg'].toFixed(3)))
-            .append($('<th></th').addClass(`xSymmetryAnalysis boxable${district}`).text(dataObj[district]['XSymmetry'].toFixed(3)))
+            .append($('<th></th').addClass(`convexHullAnalysis boxable${district}`).text(dataObj[district]['ConvexHull'].toFixed(3))) 
             .append($('<th></th').addClass(`lengthWidthAnalysis boxable${district}`).text(dataObj[district]['LengthWidth'].toFixed(3)))
-            .append($('<th></th').addClass(`convexHullAnalysis boxable${district}`).text(dataObj[district]['ConvexHull'].toFixed(3))
-          )
+            .append($('<th></th').addClass(`xSymmetryAnalysis boxable${district}`).text(dataObj[district]['XSymmetry'].toFixed(3)))
         );
       }
     
@@ -51,7 +50,7 @@ function colorTable(metric, target){
   
       var colText = $(this).text();
   
-      if(colText <= target){
+      if(colText > target){
         $(this).attr('data-color', 'good');
       } else {
         $(this).attr('data-color', 'bad');
@@ -101,9 +100,6 @@ function getBoundaryInput() {
 
 function changeBoundary() {
 
-    console.log("changing boundary")
-
-
     var boundarySelectResponse = document.getElementById("boundarySelect").value;
     if (boundarySelectResponse == "custom") {
       $('#boundaryType').html("Enter custom boundaries between 0 and 1:");
@@ -111,7 +107,7 @@ function changeBoundary() {
     }
     else if (boundarySelectResponse == "median") {
       $('#customBoundarySelect').hide();
-      $('#boundaryType').html("Now displaying " + boundarySelectResponse + " boundaries.<br>Reock: 0.500<br>Polsby-Popper: 0.500<br>Schwartzberg: 0.500<br>Convex-Hull: 0.500<br>X-Symmetry: 0.500<br>Length-Width: 0.500");
+      $('#boundaryType').html("Now displaying " + boundarySelectResponse + " boundaries.<br>Reock: 0.500<br>Polsby-Popper: 0.500<br>Schwartzberg: 0.500<br>Convex-Hull: 0.500<br>Length-Width: 0.500<br>X-Symmetry: 0.500");
       colorTable(".reockAnalysis", .5);
       colorTable(".polsbyAnalysis", .5);
       colorTable(".schwartzbergAnalysis", .5);
@@ -121,7 +117,7 @@ function changeBoundary() {
     }
     else {
       $('#customBoundarySelect').hide();
-      $('#boundaryType').html("Now displaying " + boundarySelectResponse + " boundaries.<br>Reock: 0.289<br>Polsby-Popper: 0.095<br>Schwartzberg: 0.308<br>Convex-Hull: 0.494<br>X-Symmetry: 0.600<br>Length-Width: 0.600");
+      $('#boundaryType').html("Now displaying " + boundarySelectResponse + " boundaries.<br>Reock: 0.289<br>Polsby-Popper: 0.095<br>Schwartzberg: 0.308<br>Convex-Hull: 0.494<br>Length-Width: 0.717<br>X-Symmetry: 0.384");
       colorTable(".reockAnalysis", .289);
       colorTable(".polsbyAnalysis", .095);
       colorTable(".schwartzbergAnalysis", .308);

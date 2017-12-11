@@ -20,9 +20,9 @@ function districtChart(district, dataObj){
                 ['Reock', dataObj[district]['Reock'].toFixed(3)],
                 ['PolsbyPopper', dataObj[district]['PolsbyPopper'].toFixed(3)],
                 ['Schwartzberg', dataObj[district]['Schwartzberg'].toFixed(3)],
-                ['XSymmetry', dataObj[district]['XSymmetry'].toFixed(3)],
+                ['ConvexHull', dataObj[district]['ConvexHull'].toFixed(3)],
                 ['LengthWidth', dataObj[district]['LengthWidth'].toFixed(3)],
-                ['ConvexHull', dataObj[district]['ConvexHull'].toFixed(3)]
+                ['XSymmetry', dataObj[district]['XSymmetry'].toFixed(3)]
             ],
             keys: {
                 x: 'indicator',
@@ -113,9 +113,9 @@ function averageChart(district, dataObj){
 
 function findColor(className){
     if ($(className).attr("data-color") == "good"){
-        return '#99ff99';
+        return '#006400';
     }
     else{
-        return '#ff6666';
+        return '#8b0000';
     }
 }
