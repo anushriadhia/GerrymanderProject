@@ -2,10 +2,13 @@
 <html>
   <% include partials/head %>
   <body class="w3-light-grey">
-
     <!-- Sidebar/menu -->
     <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
      <div class="w3-container">
+       <h5>Helpful Information</h5>
+       <!-- Trigger the modal with a button -->
+         <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
+       <!-- Click here <href = "measure-info.html"> -->
        <h5>Select Measure Boundaries</h5>
       <select id="boundarySelect" onchange="changeBoundary()">
         <option value="original">Original Gerrymander
@@ -25,7 +28,7 @@
       </div>
 
       <script>
-      $('#boundaryType').html("Now displaying original boundaries.<br>Reock: 0.289<br>Polsby-Popper: 0.095<br>Schwartzberg: 0.308<br>Convex-Hull: 0.494<br>X-Symmetry: 0.600<br>Length-Width: 0.600");
+      $('#boundaryType').html("Now displaying original boundaries.<br>Reock: 0.289<br>Polsby-Popper: 0.095<br>Schwartzberg: 0.308<br>Convex-Hull: 0.494<br>Length-Width: 0.717<br>X-Symmetry: 0.384");
 
       var reockDiv = 0;
       var polsbyPopperDiv = 0;
@@ -38,7 +41,7 @@
         $(metric).each(function(){
           var colText = $(this).text();
 
-          if(colText <= target){
+          if(colText > target){
             $(this).removeClass('bad');
             $(this).addClass('good');
           } else {
@@ -48,11 +51,11 @@
         });
       }
 
+      //Repeated here for purpose of making the boundary coloration dynamic
       //highlight row and generate charts on hover
       $('#districtTableBody tr').hover(function(){
         var district = $(this).attr('id');
         highlightDistrict(district);
-        //generateCharts(district);
 
         //highlighting the rows with the good/bad/ok colors
         $(`.boxable${district}.bad`).css('background-color', '#ff6666');
@@ -107,7 +110,7 @@
           }
           else if (boundarySelectResponse == "median") {
             $('#customBoundarySelect').hide();
-            $('#boundaryType').html("Now displaying " + boundarySelectResponse + " boundaries.<br>Reock: 0.500<br>Polsby-Popper: 0.500<br>Schwartzberg: 0.500<br>Convex-Hull: 0.500<br>X-Symmetry: 0.500<br>Length-Width: 0.500");
+            $('#boundaryType').html("Now displaying " + boundarySelectResponse + " boundaries.<br>Reock: 0.500<br>Polsby-Popper: 0.500<br>Schwartzberg: 0.500<br>Convex-Hull: 0.500<br>Length-Width: 0.500<br>X-Symmetry: 0.500");
             colorTable(".reockAnalysis", .5);
             colorTable(".polsbyAnalysis", .5);
             colorTable(".schwartzbergAnalysis", .5);
@@ -117,16 +120,15 @@
           }
           else {
             $('#customBoundarySelect').hide();
-            $('#boundaryType').html("Now displaying " + boundarySelectResponse + " boundaries.<br>Reock: 0.289<br>Polsby-Popper: 0.095<br>Schwartzberg: 0.308<br>Convex-Hull: 0.494<br>X-Symmetry: 0.600<br>Length-Width: 0.600");
+            $('#boundaryType').html("Now displaying " + boundarySelectResponse + " boundaries.<br>Reock: 0.289<br>Polsby-Popper: 0.095<br>Schwartzberg: 0.308<br>Convex-Hull: 0.494<br>Length-Width: 0.717<br>X-Symmetry: 0.384");
             colorTable(".reockAnalysis", .289);
             colorTable(".polsbyAnalysis", .095);
             colorTable(".schwartzbergAnalysis", .308);
             colorTable(".convexHullAnalysis", .494);
-            colorTable(".xSymmetryAnalysis", .6);
-            colorTable(".lengthWidthAnalysis", .6);
+            colorTable(".xSymmetryAnalysis", .384);
+            colorTable(".lengthWidthAnalysis", .717);
           }
       }
-
       </script>
        <h5>Map Types</h5>
       </div>
@@ -183,6 +185,28 @@
 
      <div class="w3-panel">
        <div class="w3-row-padding" style="margin:0 -16px">
+
+         <!-- Modal -->
+          <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-lg">
+
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Helpful Information</h4>
+                </div>
+                <div class="modal-body">
+                  <% include partials/information %>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
          <br><div id="map"></div>
            <div id="div-graphs" class="w3-twothird">
              <table id = "districtTable" class="mdl-data-table">
@@ -192,9 +216,9 @@
                       <th>Reock</th>
                       <th>Polsby-Popper</th>
                       <th>Schwartzberg</th>
-                      <th>X-Symmetry</th>
-                      <th>Length-Width</th>
                       <th>Convex-Hull</th>
+                      <th>Length-Width</th>
+                      <th>X-Symmetry</th>
                     </tr>
                 </thead>
                 <tbody id="districtTableBody"></tbody>
@@ -222,10 +246,9 @@
             .append($('<th></th').addClass(`reockAnalysis boxable${district}`).text(dataObj[district]['Reock'].toFixed(3)))
             .append($('<th></th').addClass(`polsbyAnalysis boxable${district}`).text(dataObj[district]['PolsbyPopper'].toFixed(3)))
             .append($('<th></th').addClass(`schwartzbergAnalysis boxable${district}`).text(dataObj[district]['Schwartzberg'].toFixed(3)))
-            .append($('<th></th').addClass(`xSymmetryAnalysis boxable${district}`).text(dataObj[district]['XSymmetry'].toFixed(3)))
+            .append($('<th></th').addClass(`convexHullAnalysis boxable${district}`).text(dataObj[district]['ConvexHull'].toFixed(3)))
             .append($('<th></th').addClass(`lengthWidthAnalysis boxable${district}`).text(dataObj[district]['LengthWidth'].toFixed(3)))
-            .append($('<th></th').addClass(`convexHullAnalysis boxable${district}`).text(dataObj[district]['ConvexHull'].toFixed(3))
-          )
+            .append($('<th></th').addClass(`xSymmetryAnalysis boxable${district}`).text(dataObj[district]['XSymmetry'].toFixed(3)))
         );
       }
 
@@ -242,7 +265,6 @@
             }
         ]
       } );
-
 
       //default table color
       colorTable(".reockAnalysis", .289);
@@ -272,7 +294,6 @@
             $(`.boxable${district}.good`).css('background-color', '');
         });
 
-
         function districtChart(district){
             let BLACK = "#000000"
 
@@ -294,14 +315,10 @@
                         ['Reock', dataObj[district]['Reock'].toFixed(3)],
                         ['PolsbyPopper', dataObj[district]['PolsbyPopper'].toFixed(3)],
                         ['Schwartzberg', dataObj[district]['Schwartzberg'].toFixed(3)],
-                        ['XSymmetry', dataObj[district]['XSymmetry'].toFixed(3)],
+                        ['ConvexHull', dataObj[district]['ConvexHull'].toFixed(3)],
                         ['LengthWidth', dataObj[district]['LengthWidth'].toFixed(3)],
-                        ['ConvexHull', dataObj[district]['ConvexHull'].toFixed(3)]
+                        ['XSymmetry', dataObj[district]['XSymmetry'].toFixed(3)]
                     ],
-                    keys: {
-                        x: 'indicator',
-                        value: ['score']
-                    },
                     colors: {
                         Reock: reockColor,
                         PolsbyPopper: polsbyPopperColor,
@@ -328,8 +345,6 @@
                     }
                 }
             });
-
-    
         }
 
         function averageChart(district){
@@ -339,7 +354,6 @@
             } else {
                 return;
             }
-
 
             let average = 0;
 
@@ -386,11 +400,8 @@
                     }
                 }
             });
-
         }
-
     });
-
     </script>
   </body>
 </html>

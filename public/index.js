@@ -266,10 +266,10 @@ function colorTable(metric, target){
 
 function findColor(className){
     if ($(className).hasClass("good")){
-        return '#99ff99';
+        return '#006400';
     }
     else{
-        return '#ff6666';
+        return '#8b0000';
     }
 }
 
