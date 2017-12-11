@@ -165,11 +165,11 @@ html,body,h1,h2,h3,h4,h5 {
     color: #777;
 }
 
-.good{
+[data-color="good"]{
   box-shadow: inset 3px 3px 7px #2cac2c;
 }
 
-.bad{
+[data-color="bad"]{
   box-shadow: inset 3px 3px 7px #c02424;
 }
 
