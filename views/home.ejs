@@ -3,7 +3,7 @@
     <% include partials/head %>
 
     <body>
-   
+
     <div class="container">
         <div class="title">
             <div id="lightHeader">
@@ -19,14 +19,16 @@
         </a>
 
         <div class = "about" id = "about">
-            <h1> What is this about?</h1>
-            <p>
-                In the process of setting electoral districts, gerrymandering is a practice intended to establish a political advantage for a particular party or group by manipulating district boundaries. The resulting district is known as a gerrymander (/ˈdʒɛriˌmændər/, recently changed from the original /ˈɡɛriˌmændər/); however, that word can also refer to the process. The term gerrymandering has negative connotations. Two principal tactics are used in gerrymandering: "cracking" (i.e. diluting the voting power of the opposing party's supporters across many districts) and "packing" (concentrating the opposing party's voting power in one district to reduce their voting power in other districts).[1]
-                In addition to its use achieving desired electoral results for a particular party, gerrymandering may be used to help or hinder a particular demographic, such as a political, ethnic, racial, linguistic, religious, or class group, such as in U.S. federal voting district boundaries that produce a majority of constituents representative of African-American or other racial minorities, known as "majority-minority districts". Gerrymandering can also be used to protect incumbents.
-            </p>
+          <center>
+            <h1>The Original Gerrymander</h1>
+            <p>The term Gerrymandering refers to the act of manipulating the boundaries of voting districts to achieve some political advantage.<br>
+            The term was coined during tenure Massachusetts Governor Elbridge Gerry, who in 1812 redrew the voting districts for the Massachusetts State Senate to favor his own party.<br>
+            One district caught the attention of the Boston Gazette, who published a political cartoon likening the district’s shape to that of a salamander and labeling the phenomenon “The Gerry-mander” after the Governor.</p>
+            <img src="images/original-gerry.png" alt="Original Gerrymander" height="1000" width="1000">
             <div class = "button">
-                    Get started
+              Get started
             </div>
+          </center>
         </div>
     </div>
 
@@ -39,7 +41,7 @@ $(window).scroll( function(){
     var topWindow = topWindow * 1.5;
 
     var windowHeight = $(window).height();
-        
+
     var position = topWindow / windowHeight;
     position = 1 - position;
 

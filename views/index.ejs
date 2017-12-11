@@ -18,12 +18,13 @@
 
       <div id="boundaryType"></div>
       <div id="customBoundarySelect" style="display: none;">
-        Reock: <input type="text" id="reockBoundary" placeholder="0.5"><br>
-        Polsby-Popper: <input type="text" id="polsbyPopperBoundary" placeholder="0.5"><br>
-        Schwartzberg: <input type="text" id="schwartzbergBoundary" placeholder="0.5"><br>
-        Convex-Hull: <input type="text" id="convexHullBoundary" placeholder="0.5"><br>
-        Length-Width: <input type="text" id="lengthWidthBoundary" placeholder="0.5"><br>
-        X-Symmetry: <input type="text" id="xSymmetryBoundary" placeholder="0.5"><br>
+        <br>
+        Reock: <input type="text" id="reockBoundary" placeholder="0.5" style="float:right;"><br><br>
+        Polsby-Popper: <input type="text" id="polsbyPopperBoundary" placeholder="0.5" style="float:right;"><br><br>
+        Schwartzberg: <input type="text" id="schwartzbergBoundary" placeholder="0.5" style="float:right;"><br><br>
+        Convex-Hull: <input type="text" id="convexHullBoundary" placeholder="0.5" style="float:right;"><br><br>
+        Length-Width: <input type="text" id="lengthWidthBoundary" placeholder="0.5" style="float:right;"><br><br>
+        X-Symmetry: <input type="text" id="xSymmetryBoundary" placeholder="0.5" style="float:right;"><br><br>
         <input type="submit" value="Submit" onclick = "getBoundaryInput()">
       </div>
        <h5>Map Types</h5>
@@ -35,62 +36,52 @@
      </div>
     </nav>
 
-    <!-- Overlay effect when opening sidebar on small screens -->
-    <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
-    <!-- !PAGE CONTENT! -->
-    <div class="w3-main" style="margin-left:300px;margin-top:43px;">
+    <div id="map" style="margin-left:300px;"></div>
+    <div id="div-graphs" class="w3-twothird">
+      <table id = "districtTable" class="mdl-data-table">
+         <thead>
+             <tr>
+               <th>District</th>
+               <th>Reock</th>
+               <th>Polsby-Popper</th>
+               <th>Schwartzberg</th>
+               <th>Convex-Hull</th>
+               <th>Length-Width</th>
+               <th>X-Symmetry</th>
+             </tr>
+         </thead>
+         <tbody id="districtTableBody"></tbody>
+       </table>
+    </div>
 
+    <div id="div-metrics" class="w3-third">
+      <br><br>
+      <div id = "barChart"></div><br>
+      <div id = "lengthwidthBarChart"></div>
+    </div>
 
-     <div class="w3-panel">
-       <div class="w3-row-padding" style="margin:0 -16px">
+    <!-- Modal -->
+     <div class="modal fade" id="myModal" role="dialog">
+       <div class="modal-dialog modal-lg">
 
-         <!-- Modal -->
-          <div class="modal fade" id="myModal" role="dialog">
-            <div class="modal-dialog modal-lg">
-
-              <!-- Modal content-->
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title">Helpful Information</h4>
-                </div>
-                <div class="modal-body">
-                  <% include partials/information %>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-         <br><div id="map"></div>
-           <div id="div-graphs" class="w3-twothird">
-             <table id = "districtTable" class="mdl-data-table">
-                <thead>
-                    <tr>
-                      <th>District</th>
-                      <th>Reock</th>
-                      <th>Polsby-Popper</th>
-                      <th>Schwartzberg</th>
-                      <th>Convex-Hull</th>
-                      <th>Length-Width</th>
-                      <th>X-Symmetry</th>
-                    </tr>
-                </thead>
-                <tbody id="districtTableBody"></tbody>
-              </table>
+         <!-- Modal content-->
+         <div class="modal-content">
+           <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal">&times;</button>
+             <h4 class="modal-title">Helpful Information</h4>
            </div>
-           <div id="div-metrics" class="w3-third">
-             <h5>District Information</h5>
-             <div id = "barChart"></div><br>
-             <div id = "lengthwidthBarChart"></div>
+           <div class="modal-body">
+             <% include partials/information %>
+           </div>
+           <div class="modal-footer">
+             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
            </div>
          </div>
+
        </div>
      </div>
+
 
     <script>
     $(document).ready(function() {
